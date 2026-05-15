@@ -71,7 +71,8 @@
 }
 
 % ── Graphics path ────────────────────────────────────────────
-\graphicspath{{../../screenshots/}}
+% Overleaf: all images are in the same project root
+\graphicspath{{./}}
 
 % ============================================================
 \begin{document}
@@ -113,7 +114,7 @@ Babul Hoque \quad\quad (Roll No. 202202021020)
 {\normalsize\bfseries Mr. Bikramjit Choudhury, Asst. Prof.\par}
 
 \vspace{0.5cm}
-\includegraphics[width=0.22\textwidth]{../../Project Report Template/cit_logo.png}
+\includegraphics[width=0.22\textwidth]{cit_logo.png}
 \par
 \vspace{0.4cm}
 
@@ -892,7 +893,7 @@ and evaluated on 24,259 test samples. It achieved an overall accuracy of
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.85\textwidth]{LightGBM/Accuracy.png}
+  \includegraphics[width=0.85\textwidth]{screenshots/LightGBM/Accuracy.png}
   \caption{LightGBM overall test accuracy}
   \label{fig:lgbm_accuracy}
 \end{figure}
@@ -925,7 +926,7 @@ Vulnerability\_Scanner (11)& 1.0000 & 1.0000 & 1.0000 & 2,057 \\
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.85\textwidth]{LightGBM/Classification Report.png}
+  \includegraphics[width=0.85\textwidth]{screenshots/LightGBM/Classification_Report.png}
   \caption{LightGBM classification report (screenshot from Colab)}
   \label{fig:lgbm_clf_report}
 \end{figure}
@@ -934,7 +935,7 @@ Vulnerability\_Scanner (11)& 1.0000 & 1.0000 & 1.0000 & 2,057 \\
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.75\textwidth]{LightGBM/Confusion Matrix.png}
+  \includegraphics[width=0.75\textwidth]{screenshots/LightGBM/Confusion_Matrix.png}
   \caption{LightGBM confusion matrix on 10-class test set}
   \label{fig:lgbm_cm}
 \end{figure}
@@ -949,7 +950,7 @@ that share network-level characteristics (e.g., Password and SQL Injection).
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.85\textwidth]{Autoencoder/Reconstruction error & Threshold.png}
+  \includegraphics[width=0.85\textwidth]{screenshots/Autoencoder/Reconstruction_error_Threshold.png}
   \caption{Autoencoder reconstruction error distribution with anomaly threshold}
   \label{fig:ae_threshold}
 \end{figure}
@@ -985,7 +986,7 @@ Attack (1) & 0.9904 & 1.0000 & 0.9952 & 128,237 \\
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.80\textwidth]{Autoencoder/Classification Report.png}
+  \includegraphics[width=0.80\textwidth]{screenshots/Autoencoder/Classification_Report.png}
   \caption{Autoencoder classification report (screenshot from Colab)}
   \label{fig:ae_clf_report}
 \end{figure}
@@ -994,7 +995,7 @@ Attack (1) & 0.9904 & 1.0000 & 0.9952 & 128,237 \\
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.70\textwidth]{Autoencoder/Confusion Matrix.png}
+  \includegraphics[width=0.70\textwidth]{screenshots/Autoencoder/Confusion_Matrix.png}
   \caption{Autoencoder confusion matrix (binary: Normal vs. Attack)}
   \label{fig:ae_cm}
 \end{figure}
@@ -1036,14 +1037,14 @@ Attack (1) & 0.9611 & 0.9833 & 0.9720 & 31,096 \\
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.80\textwidth]{Fusion_Model/Classification Report.png}
+  \includegraphics[width=0.80\textwidth]{screenshots/Fusion_Model/Classification_Report.png}
   \caption{Fusion Model classification report (screenshot from Colab)}
   \label{fig:fusion_clf_report}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.80\textwidth]{Fusion_Model/Classification Result.png}
+  \includegraphics[width=0.80\textwidth]{screenshots/Fusion_Model/Classification_Result.png}
   \caption{Fusion Model classification results summary}
   \label{fig:fusion_result}
 \end{figure}
@@ -1052,7 +1053,7 @@ Attack (1) & 0.9611 & 0.9833 & 0.9720 & 31,096 \\
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.75\textwidth]{Visualizations/Fusion Model Confusion Matrix.png}
+  \includegraphics[width=0.75\textwidth]{screenshots/Visualizations/Fusion_Model_Confusion_Matrix.png}
   \caption{Fusion Model confusion matrix on the zero-day test set}
   \label{fig:fusion_cm}
 \end{figure}
@@ -1089,7 +1090,7 @@ Autoencoder                 & Zero-day detection & 99.19\% & Yes \\
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.85\textwidth]{Visualizations/Performance Metric Comparison.png}
+  \includegraphics[width=0.85\textwidth]{screenshots/Visualizations/Performance_Metric_Comparison.png}
   \caption{Performance metric comparison across all models}
   \label{fig:perf_comparison}
 \end{figure}
@@ -1098,7 +1099,7 @@ Autoencoder                 & Zero-day detection & 99.19\% & Yes \\
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.85\textwidth]{Visualizations/Zero Day Attach detection Accuracy Comparison.png}
+  \includegraphics[width=0.85\textwidth]{screenshots/Visualizations/Zero_Day_Attack_detection_Accuracy_Comparison.png}
   \caption{Zero-day attack detection accuracy comparison}
   \label{fig:zeroday_comparison}
 \end{figure}
