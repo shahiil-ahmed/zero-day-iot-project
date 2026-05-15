@@ -1,0 +1,5 @@
+Model,Accuracy,Purpose
+Isolation Forest,0.49,Baseline Anomaly Detection
+LightGBM,0.9999,Known Attack Classification
+Autoencoder,0.99,Zero-Day Detection
+Fusion Model,0.97,Hybrid Detection System
