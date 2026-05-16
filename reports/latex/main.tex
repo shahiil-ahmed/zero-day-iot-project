@@ -77,69 +77,64 @@
 \begin{document}
 
 % ── Title page ───────────────────────────────────────────────
-% Matches sample: Title bold large at top, submission text, by + names,
-% supervisor, LOGO in centre, department + Hindi + college + address + date
 \begin{titlepage}
 \centering
-\vspace*{0.8cm}
+\vspace*{0.4cm}
 
-% Project title – large bold
+% Project title – large bold, no subtitle line
 {\LARGE\bfseries
 Zero-Day IoT Attack Detection Using a\\[8pt]
-Hybrid Machine Learning Approach\\[6pt]
-(LightGBM + Autoencoder Fusion Model)
-\par}
-
-\vspace{0.7cm}
-% Submission statement
-{\normalsize
-A Project Work Submitted in Partial Fulfillment\\
-of the requirements for the Degree\\[6pt]
-\textit{BACHELOR OF TECHNOLOGY}\\[4pt]
-in\\[4pt]
-\textit{\textcolor{blue}{COMPUTER SCIENCE \& ENGINEERING}}
-\par}
-
-\vspace{0.6cm}
-{\normalsize by\par}
-\vspace{0.4cm}
-
-% Student names and roll numbers
-{\normalsize
-Shahil Ahmed \quad (Roll No. 202202021046)\\[6pt]
-\&\\[6pt]
-Jagriti Shivam \quad (Roll No. 202202021091)\\[6pt]
-\&\\[6pt]
-Khushi Das \quad\quad (Roll No. 202202021113)\\[6pt]
-\&\\[6pt]
-Babul Hoque \quad\quad (Roll No. 202202021020)
-\par}
-
-\vspace{0.5cm}
-{\normalsize Under the supervision of\par}
-\vspace{0.25cm}
-{\normalsize\bfseries
-Dr./Mr. Bikramjit Choudhury\\[2pt]
-\&\\[2pt]
-Dr./Mr. Faculty Name2
+Hybrid Machine Learning Approach
 \par}
 
 \vspace{0.55cm}
-% CIT Logo
-\includegraphics[width=0.20\textwidth]{cit_logo.png.png}
-\par
-\vspace{0.45cm}
+% Submission statement
+{\normalsize
+A Project Work Submitted in Partial Fulfillment\\
+of the requirements for the Degree\\[5pt]
+\textit{BACHELOR OF TECHNOLOGY}\\[3pt]
+in\\[3pt]
+\textit{\textcolor{blue}{COMPUTER SCIENCE \& ENGINEERING}}
+\par}
 
-% Department and college block – matching sample exactly
-{\normalsize\bfseries DEPARTMENT OF COMPUTER SCIENCE \& ENGINEERING\par}
-\vspace{0.15cm}
-{\normalsize\textcolor{blue}{केन्द्रीय प्रौद्योगिकी संस्थान  कोकराझार}\par}
-\vspace{0.1cm}
-{\normalsize\bfseries CENTRAL INSTITUTE OF TECHNOLOGY KOKRAJHAR\par}
-{\small (A Centrally Funded Institute under Ministry of HRD, Govt. of India)\\[2pt]
-BODOLAND TERRITORIAL AREAS DISTRICTS :: KOKRAJHAR :: ASSAM :: 783370\\[2pt]
-Website: www.cit.ac.in\par}
+\vspace{0.45cm}
+{\normalsize by\par}
 \vspace{0.3cm}
+
+% Student names and roll numbers
+{\normalsize
+Shahil Ahmed \quad (Roll No. 202202021046)\\[4pt]
+\&\\[4pt]
+Jagriti Shivam \quad (Roll No. 202202021091)\\[4pt]
+\&\\[4pt]
+Khushi Das \quad\quad (Roll No. 202202021113)\\[4pt]
+\&\\[4pt]
+Babul Hoque \quad\quad (Roll No. 202202021020)
+\par}
+
+\vspace{0.4cm}
+{\normalsize Under the supervision of\par}
+\vspace{0.2cm}
+% Single supervisor only
+{\normalsize\bfseries Mr. Bikramjit Choudhury\par}
+{\normalsize Assistant Professor, Dept. of CSE\par}
+
+\vspace{0.4cm}
+% CIT Logo – centred
+\includegraphics[width=0.19\textwidth]{cit_logo.png.png}
+\par
+\vspace{0.35cm}
+
+% Department and college block
+{\normalsize\bfseries DEPARTMENT OF COMPUTER SCIENCE \& ENGINEERING\par}
+\vspace{0.12cm}
+{\normalsize\textcolor{blue}{केन्द्रीय प्रौद्योगिकी संस्थान\quad कोकराझार}\par}
+\vspace{0.08cm}
+{\normalsize\bfseries CENTRAL INSTITUTE OF TECHNOLOGY KOKRAJHAR\par}
+{\small (A Centrally Funded Institute under Ministry of HRD, Govt. of India)\\[1pt]
+BODOLAND TERRITORIAL AREAS DISTRICTS :: KOKRAJHAR :: ASSAM :: 783370\\[1pt]
+Website: www.cit.ac.in\par}
+\vspace{0.25cm}
 {\normalsize MAY 2026\par}
 \end{titlepage}
 
@@ -179,13 +174,14 @@ for the degree of B.Tech in Computer Science and Engineering.
 \vspace{3.5cm}
 \noindent
 \begin{minipage}[t]{0.45\textwidth}
-\textbf{Project Co-ordinator}\\[2.5cm]
-\rule{5cm}{0.4pt}
+\textbf{Project Co-ordinator}\\[3cm]
+\textbf{(Mr. Mithun Karmakar)}\\
+Assistant Professor, Dept. of CSE
 \end{minipage}
 \hfill
 \begin{minipage}[t]{0.45\textwidth}
-\textbf{External Examiner}\\[2.5cm]
-\rule{5cm}{0.4pt}
+\textbf{External Examiner}\\[3cm]
+\rule{5.5cm}{0.4pt}
 \end{minipage}
 
 % ── Certificate of Approval (Supervisor) ─────────────────────
@@ -226,13 +222,13 @@ Engineering.
 \noindent
 \begin{minipage}[t]{0.45\textwidth}
 \textbf{Supervisor}\\[3cm]
-\textbf{(Dr./Mr. Bikramjit Choudhury)}\\
-Designation, Dept. of CSE
+\textbf{(Mr. Bikramjit Choudhury)}\\
+Assistant Professor, Dept. of CSE
 \end{minipage}
 \hfill
 \begin{minipage}[t]{0.45\textwidth}
 \textbf{Countersigned by}\\[3cm]
-\textbf{(Dr. Faculty Name)}\\
+\textbf{(Dr. Apurbalal Senapati)}\\
 \textbf{HoD}\\
 Department of CSE
 \end{minipage}
@@ -271,14 +267,19 @@ and this work simply would not exist without it.
 \texttt{Pandas} — tools we used daily and took for granted until we tried to imagine
 doing any of this without them.
 
+% Signature block – space for all four students to sign
 \vspace{1.5cm}
-\noindent Date: \underline{\hspace{3cm}}
-\hfill
-\begin{tabular}{l}
-Shahil Ahmed \quad (202202021046)\\[6pt]
-Jagriti Shivam \quad (202202021091)\\[6pt]
-Khushi Das \quad\quad (202202021113)\\[6pt]
-Babul Hoque \quad\quad (202202021020)
+\noindent Date: \underline{\hspace{3.5cm}}
+
+\vspace{1.2cm}
+\noindent
+\begin{tabular}{@{}p{0.48\textwidth}p{0.48\textwidth}@{}}
+  \rule{6cm}{0.4pt} & \rule{6cm}{0.4pt} \\[2pt]
+  Shahil Ahmed & Jagriti Shivam \\
+  (Roll No. 202202021046) & (Roll No. 202202021091) \\[1.8cm]
+  \rule{6cm}{0.4pt} & \rule{6cm}{0.4pt} \\[2pt]
+  Khushi Das & Babul Hoque \\
+  (Roll No. 202202021113) & (Roll No. 202202021020) \\
 \end{tabular}
 
 % ── Abstract ─────────────────────────────────────────────────
