@@ -71,119 +71,171 @@
 }
 
 % ── Graphics path ────────────────────────────────────────────
-\graphicspath{{../../screenshots/}}
+\graphicspath{{../../screenshots/}{../../Project Report Template/}}
 
 % ============================================================
 \begin{document}
 
 % ── Title page ───────────────────────────────────────────────
+% Matches sample: Title bold large at top, submission text, by + names,
+% supervisor, LOGO in centre, department + Hindi + college + address + date
 \begin{titlepage}
 \centering
-\vspace*{0.5cm}
+\vspace*{0.8cm}
 
-{\Large\bfseries
-Zero-Day IoT Attack Detection Using a\\[6pt]
-Hybrid Machine Learning Approach\\[4pt]
+% Project title – large bold
+{\LARGE\bfseries
+Zero-Day IoT Attack Detection Using a\\[8pt]
+Hybrid Machine Learning Approach\\[6pt]
 (LightGBM + Autoencoder Fusion Model)
 \par}
 
-\vspace{0.6cm}
+\vspace{0.7cm}
+% Submission statement
 {\normalsize
 A Project Work Submitted in Partial Fulfillment\\
-of the requirements for the Degree\\[4pt]
-\textit{BACHELOR OF TECHNOLOGY}\\[2pt]
-in\\[2pt]
+of the requirements for the Degree\\[6pt]
+\textit{BACHELOR OF TECHNOLOGY}\\[4pt]
+in\\[4pt]
 \textit{\textcolor{blue}{COMPUTER SCIENCE \& ENGINEERING}}
 \par}
 
-\vspace{0.5cm}
+\vspace{0.6cm}
 {\normalsize by\par}
-\vspace{0.3cm}
+\vspace{0.4cm}
 
+% Student names and roll numbers
 {\normalsize
-Shahil Ahmed \quad (Roll No. 202202021046)\\[4pt]
-Jagriti Shivam \quad (Roll No. 202202021091)\\[4pt]
-Khushi Das \quad\quad (Roll No. 202202021113)\\[4pt]
+Shahil Ahmed \quad (Roll No. 202202021046)\\[6pt]
+\&\\[6pt]
+Jagriti Shivam \quad (Roll No. 202202021091)\\[6pt]
+\&\\[6pt]
+Khushi Das \quad\quad (Roll No. 202202021113)\\[6pt]
+\&\\[6pt]
 Babul Hoque \quad\quad (Roll No. 202202021020)
 \par}
 
 \vspace{0.5cm}
-{\normalsize Under the Supervision of\par}
-\vspace{0.2cm}
-{\normalsize\bfseries Mr. Bikramjit Choudhury, Asst. Prof.\par}
+{\normalsize Under the supervision of\par}
+\vspace{0.25cm}
+{\normalsize\bfseries
+Dr./Mr. Bikramjit Choudhury\\[2pt]
+\&\\[2pt]
+Dr./Mr. Faculty Name2
+\par}
 
-\vspace{0.5cm}
-\includegraphics[width=0.22\textwidth]{cit_logo.png}
+\vspace{0.55cm}
+% CIT Logo
+\includegraphics[width=0.20\textwidth]{cit_logo.png.png}
 \par
-\vspace{0.4cm}
+\vspace{0.45cm}
 
+% Department and college block – matching sample exactly
 {\normalsize\bfseries DEPARTMENT OF COMPUTER SCIENCE \& ENGINEERING\par}
 \vspace{0.15cm}
-{\small\textcolor{blue}{केन्द्रीय प्रौद्योगिकी संस्थान कोकराझार}\par}
+{\normalsize\textcolor{blue}{केन्द्रीय प्रौद्योगिकी संस्थान  कोकराझार}\par}
 \vspace{0.1cm}
-{\normalsize CENTRAL INSTITUTE OF TECHNOLOGY KOKRAJHAR\par}
-{\small (A Centrally Funded Institute under Ministry of HRD, Govt. of India)\\
-BODOLAND TERRITORIAL AREAS DISTRICTS :: KOKRAJHAR :: ASSAM :: 783370\\
+{\normalsize\bfseries CENTRAL INSTITUTE OF TECHNOLOGY KOKRAJHAR\par}
+{\small (A Centrally Funded Institute under Ministry of HRD, Govt. of India)\\[2pt]
+BODOLAND TERRITORIAL AREAS DISTRICTS :: KOKRAJHAR :: ASSAM :: 783370\\[2pt]
 Website: www.cit.ac.in\par}
 \vspace{0.3cm}
 {\normalsize MAY 2026\par}
 \end{titlepage}
 
 % ── Certificate of Approval ──────────────────────────────────
+% Matches sample: Logo + dept header at top, then certificate title + body,
+% Supervisor left + Countersigned by (HoD) right
 \newpage
 \thispagestyle{empty}
-\begin{center}
-{\Large\bfseries\underline{CERTIFICATE OF APPROVAL}}
-\end{center}
-\vspace{1cm}
 
-\noindent This is to certify that the work embodied in this project entitled
+% Institutional header block (matches sample certificate pages)
+\begin{center}
+  \includegraphics[width=0.18\textwidth]{cit_logo.png.png}\\[6pt]
+  {\small\bfseries DEPARTMENT OF COMPUTER SCIENCE \& ENGINEERING\\[2pt]}
+  {\small\textcolor{blue}{केन्द्रीय प्रौद्योगिकि संस्थान  कोकराझार}\\[2pt]}
+  {\small CENTRAL INSTITUTE OF TECHNOLOGY, KOKRAJHAR\\
+  \textit{(An Autonomous Institute under MHRD)}\\
+  Kokrajhar -- 783370, BTAD, Assam, India}
+\end{center}
+
+\vspace{0.6cm}
+\begin{center}
+{\large\bfseries\underline{CERTIFICATE OF APPROVAL}}
+\end{center}
+\vspace{0.8cm}
+
+\noindent\hspace{2em}This is to certify that the work embodied in this project entitled
 \textbf{Zero-Day IoT Attack Detection Using a Hybrid Machine Learning Approach}
 submitted by \textbf{Shahil Ahmed, Jagriti Shivam, Khushi Das,} and \textbf{Babul Hoque}
-to the Department of Computer Science \& Engineering, is carried out under our direct
-supervision and guidance.
-
-\vspace{0.5cm}
-\noindent The project work has been prepared as per the regulations of Central Institute
-of Technology and I strongly recommend that this project work be accepted in partial
-fulfillment of the requirement for the degree of B.Tech in Computer Science and Engineering.
-
-\vspace{3cm}
-\noindent\textbf{Supervisor}
-
-\vspace{1.5cm}
-\noindent\textbf{(Mr. Bikramjit Choudhury)}\\
-Asst. Prof., Dept. of CSE
-
-% ── Certificate by Board of Examiners ───────────────────────
-\newpage
-\thispagestyle{empty}
-\begin{center}
-{\Large\bfseries\underline{Certificate by the Board of Examiners}}
-\end{center}
-\vspace{1cm}
-
-\noindent This is to certify that the project work entitled
-\textbf{Zero-Day IoT Attack Detection Using a Hybrid Machine Learning Approach}
-submitted by \textbf{Shahil Ahmed, Jagriti Shivam, Khushi Das,} and \textbf{Babul Hoque}
-to the Department of Computer Science and Engineering of Central Institute of Technology,
+to the Department of \textcolor{blue}{Computer Science \& Engineering} of Central Institute of Technology,
 Kokrajhar has been examined and evaluated.
 
 \vspace{0.5cm}
-\noindent The project work has been prepared as per the regulations of Central Institute
-of Technology and qualifies to be accepted in partial fulfillment of the requirement for
-the degree of B.Tech in Computer Science and Engineering.
+\noindent\hspace{2em}The project work has been prepared as per the regulations of Central Institute
+of Technology and qualifies to be accepted in partial fulfillment of the requirement
+for the degree of B.Tech in Computer Science and Engineering.
 
-\vspace{2.5cm}
-\noindent Project Co-ordinator
+\vspace{3.5cm}
+\noindent
+\begin{minipage}[t]{0.45\textwidth}
+\textbf{Project Co-ordinator}\\[2.5cm]
+\rule{5cm}{0.4pt}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.45\textwidth}
+\textbf{External Examiner}\\[2.5cm]
+\rule{5cm}{0.4pt}
+\end{minipage}
 
-\vspace{2.5cm}
-\noindent Countersigned by
+% ── Certificate of Approval (Supervisor) ─────────────────────
+% Matches sample: Logo + dept header at top, then certificate title + body,
+% Supervisor left + Countersigned by (HoD) right
+\newpage
+\thispagestyle{empty}
 
-\vspace{1.5cm}
-\noindent\textbf{(Dr. Faculty Name)}\\
+% Institutional header block
+\begin{center}
+  \includegraphics[width=0.18\textwidth]{cit_logo.png.png}\\[6pt]
+  {\small\bfseries DEPARTMENT OF COMPUTER SCIENCE \& ENGINEERING\\[2pt]}
+  {\small\textcolor{blue}{केन्द्रीय प्रौद्योगिकि संस्थान  कोकराझार}\\[2pt]}
+  {\small CENTRAL INSTITUTE OF TECHNOLOGY, KOKRAJHAR\\
+  \textit{(An Autonomous Institute under MHRD)}\\
+  Kokrajhar -- 783370, BTAD, Assam, India}
+\end{center}
+
+\vspace{0.6cm}
+\begin{center}
+{\large\bfseries\underline{CERTIFICATE OF APPROVAL}}
+\end{center}
+\vspace{0.8cm}
+
+\noindent\hspace{2em}This is to certify that the work embodied in this project entitled
+\textbf{Zero-Day IoT Attack Detection Using a Hybrid Machine Learning Approach}
+submitted by \textbf{Shahil Ahmed, Jagriti Shivam, Khushi Das,} and \textbf{Babul Hoque}
+to the Department of \textcolor{blue}{Computer Science \& Engineering}, is carried out under
+our direct supervisions and guidance.
+
+\vspace{0.5cm}
+\noindent\hspace{2em}The project work has been prepared as per the regulations of Central Institute
+of Technology and I strongly recommend that this project work be accepted in partial
+fulfillment of the requirement for the degree of B.Tech in Computer Science and
+Engineering.
+
+\vspace{3.5cm}
+\noindent
+\begin{minipage}[t]{0.45\textwidth}
+\textbf{Supervisor}\\[3cm]
+\textbf{(Dr./Mr. Bikramjit Choudhury)}\\
+Designation, Dept. of CSE
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.45\textwidth}
+\textbf{Countersigned by}\\[3cm]
+\textbf{(Dr. Faculty Name)}\\
 \textbf{HoD}\\
 Department of CSE
+\end{minipage}
 
 % ── Acknowledgement ──────────────────────────────────────────
 \newpage
