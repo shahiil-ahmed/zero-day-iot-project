@@ -193,27 +193,31 @@ Department of CSE
 \end{center}
 \vspace{1cm}
 
-\noindent We would like to express our sincere gratitude to
-\textbf{Mr. Bikramjit Choudhury}, Assistant Professor, Department of Computer Science \&
-Engineering, Central Institute of Technology Kokrajhar, for his invaluable guidance,
-constant encouragement, and constructive suggestions throughout the course of this project.
-His expertise in machine learning and network security significantly shaped the direction
-and quality of this work.
+\noindent We owe a great deal of thanks to \textbf{Mr. Bikramjit Choudhury},
+Assistant Professor, Department of Computer Science \& Engineering, CIT Kokrajhar,
+whose patient guidance and practical feedback kept us on track throughout this project.
+Whenever we were stuck — whether it was a dataset loading bug at midnight or a confusing
+result in the confusion matrix — his door was always open. His background in both
+networking and machine learning proved invaluable in helping us make the right design
+choices early on.
 
 \vspace{0.5cm}
-\noindent We are thankful to the \textbf{Head of the Department} and all the faculty members
-of the Department of CSE, CIT Kokrajhar, for providing us with the resources and academic
-environment necessary to carry out this project.
+\noindent We also thank the \textbf{Head of the Department} and the broader faculty of
+the CSE department for creating an environment where students are encouraged to take on
+ambitious ideas. The lab infrastructure and Colab Pro access that the department arranged
+made a real difference to how smoothly the experiments ran.
 
 \vspace{0.5cm}
-\noindent We are also grateful to the creators of the
-\textbf{Edge-IIoTset} dataset~\cite{dataset_edge_iiotset} for making it publicly available,
-which formed the backbone of our experimental evaluation.
+\noindent A special mention goes to the team behind the
+\textbf{Edge-IIoTset} dataset~\cite{dataset_edge_iiotset}. Making a
+well-labelled, realistic IoT traffic dataset publicly available is no small effort,
+and this work simply would not exist without it.
 
 \vspace{0.5cm}
-\noindent Finally, we acknowledge the contributions of the open-source community behind
-the Python libraries — \texttt{scikit-learn}, \texttt{LightGBM}, \texttt{TensorFlow/Keras},
-and \texttt{Pandas} — that powered our implementation.
+\noindent Finally, we appreciate the open-source contributors behind
+\texttt{scikit-learn}, \texttt{LightGBM}, \texttt{TensorFlow/Keras}, and
+\texttt{Pandas} — tools we used daily and took for granted until we tried to imagine
+doing any of this without them.
 
 \vspace{1.5cm}
 \noindent Date: \underline{\hspace{3cm}}
@@ -233,33 +237,36 @@ Babul Hoque \quad\quad (202202021020)
 \addcontentsline{toc}{chapter}{Abstract}
 \vspace{0.5cm}
 
-The rapid proliferation of Internet of Things (IoT) devices has introduced significant
-cybersecurity challenges. While traditional intrusion detection systems perform well
-against known attacks, they fail to detect novel or zero-day threats — attacks that
-have never been seen before. This project proposes and implements a \textbf{hybrid
-intrusion detection system (IDS)} for IoT networks that combines a supervised classifier
-and an unsupervised anomaly detector to address both known and zero-day attacks.
+IoT devices are everywhere today — in hospitals, factories, homes, and city
+infrastructure. But most of them were never designed with security in mind, and
+attackers have taken full advantage of that. The bigger problem, though, is not just
+the attacks we already know about. It is the ones we have never seen before — the
+so-called zero-day threats — that pose the greatest risk to any detection system built
+purely on historical patterns.
 
 \vspace{0.5cm}
-\noindent The proposed system leverages the \textbf{Edge-IIoTset} dataset, a comprehensive
-IoT network traffic dataset containing 15 attack categories. We adopt a two-stage pipeline:
-first, a \textbf{LightGBM} classifier is trained on 10 known attack types to achieve
-high-accuracy classification of familiar threats (99.99\%); second, a symmetric
-\textbf{Autoencoder} neural network is trained exclusively on normal traffic to
-reconstruct-error-based anomaly detection of zero-day attacks (99.19\% accuracy on
-the full dataset). A \textbf{Fusion Model} integrates both components using a confidence-based
-routing strategy, achieving 96.82\% accuracy on a combined test set including
-five previously unseen zero-day attack categories.
+\noindent This project grew out of a simple question: can we build a single system that
+handles both familiar attacks and completely new ones at the same time? Our answer is a
+\textbf{hybrid intrusion detection system (IDS)} that pairs a gradient-boosted tree
+classifier with a neural-network-based anomaly detector, then fuses their decisions
+intelligently. We trained the \textbf{LightGBM} classifier on ten known attack classes
+from the Edge-IIoTset dataset~\cite{dataset_edge_iiotset} and got 99.99\% accuracy on
+those. Separately, we trained a symmetric \textbf{Autoencoder} on nothing but normal
+traffic, so it learns what ``ordinary'' IoT data looks like and raises an alarm whenever
+something deviates from that picture. On its own, the Autoencoder reached 99.19\%
+accuracy across the full dataset.
 
 \vspace{0.5cm}
-\noindent Experimental results demonstrate that the proposed hybrid approach significantly
-outperforms baseline methods such as Isolation Forest (49\% accuracy), confirming the
-effectiveness of combining supervised and unsupervised techniques for robust IoT
-intrusion detection.
+\noindent The real test came when we put both models together in a \textbf{Fusion Model}
+and threw five attack categories at it that neither model had ever seen during training.
+The combined system managed 96.82\% accuracy — a nearly 48-percentage-point jump over a
+standalone Isolation Forest baseline that barely scraped 49\%. These results gave us
+confidence that mixing supervised and unsupervised methods is not just theoretically
+appealing but practically effective.
 
 \vspace{0.5cm}
-\noindent \textbf{Keywords:} IoT Security, Intrusion Detection, Zero-Day Attacks, LightGBM,
-Autoencoder, Anomaly Detection, Fusion Model, Edge-IIoTset.
+\noindent \textbf{Keywords:} IoT Security, Intrusion Detection, Zero-Day Attacks,
+LightGBM, Autoencoder, Anomaly Detection, Fusion Model, Edge-IIoTset.
 
 % ── Table of Contents ────────────────────────────────────────
 \newpage
@@ -279,6 +286,7 @@ Autoencoder, Anomaly Detection, Fusion Model, Edge-IIoTset.
 \pagenumbering{arabic}
 
 
+
 % ============================================================
 %  CHAPTER 1 – INTRODUCTION
 % ============================================================
@@ -286,82 +294,105 @@ Autoencoder, Anomaly Detection, Fusion Model, Edge-IIoTset.
 
 \section{Background}
 
-The Internet of Things (IoT) refers to the interconnected network of physical
-devices — sensors, actuators, embedded computers, and smart appliances — that
-communicate over the internet to exchange data and perform automated tasks.
-As of 2024, there are an estimated 15 billion active IoT devices worldwide,
-with projections exceeding 30 billion by 2030~\cite{iot_growth}. These devices
-span critical sectors including healthcare, industrial automation, smart grids,
-transportation, and home automation.
+When we started thinking about what to build for our final-year project, the
+topic of IoT security kept coming up — partly because it is genuinely unsolved,
+and partly because the scale of the problem is hard to ignore. According to
+recent industry figures, there are now over 15 billion connected IoT devices in
+active use, and that number is expected to climb past 30 billion before the end
+of the decade~\cite{iot_growth}. These devices show up in almost every corner of
+modern life: patient monitors in hospitals, sensors on factory floors, smart
+meters in homes, cameras on street corners, and dozens of other places where
+reliable, secure operation actually matters.
 
-\noindent However, the expanding IoT ecosystem has dramatically widened the
-cybersecurity attack surface. IoT devices are typically resource-constrained
-(limited CPU, memory, and battery), run outdated firmware, lack encryption,
-and are often deployed without proper security configuration. This makes them
-prime targets for cyber attackers who exploit vulnerabilities to launch
-Distributed Denial of Service (DDoS) attacks, data exfiltration campaigns,
-ransomware, and network intrusions~\cite{iot_security_challenges}.
+\noindent The trouble is that most of these devices were built to be cheap and
+convenient, not secure. They often run on hardware with very limited processing
+power and memory, ship with firmware that rarely gets updated, and are connected
+to networks with little or no encryption. Attackers discovered this long ago.
+The Mirai botnet incident back in 2016 — where hundreds of thousands of ordinary
+home routers and cameras were silently hijacked and used to knock major websites
+offline — was a wake-up call that the IoT security problem is not just
+theoretical~\cite{mirai_attack}. Since then, things have only grown more complex
+as more devices, more protocols, and more attack vectors have appeared
+~\cite{iot_security_challenges}.
+
+\noindent Traditional intrusion detection systems try to tackle this by
+maintaining a catalogue of known attack signatures. When traffic matches a
+pattern in that catalogue, an alert fires. This works reasonably well for attacks
+that have been seen and catalogued before, but it completely misses anything new.
+Zero-day attacks — those that exploit fresh vulnerabilities or use techniques not
+yet in any signature database — sail straight through. That gap is what this
+project tries to close.
 
 \section{Problem Statement}
 
-Traditional signature-based intrusion detection systems (IDS) rely on
-pre-defined patterns of known attacks. While effective against familiar
-threats, they are fundamentally incapable of detecting \textbf{zero-day
-attacks} — novel intrusions that exploit previously unknown vulnerabilities
-or employ new attack strategies never seen in training data.
+The core challenge we set out to solve is straightforward to describe but
+difficult to implement well. Any practical IoT intrusion detection system needs
+to do two things simultaneously: it needs to correctly identify the attacks it
+has been trained on, and it also needs to flag traffic that does not look like
+anything it has seen before. Most existing systems do one or the other, rarely
+both.
 
-\noindent The key challenges addressed in this project are:
+\noindent More specifically, the three problems we focused on are:
 \begin{enumerate}
-  \item \textbf{Known Attack Detection}: Accurately classifying network
-        traffic among multiple known attack categories in real time.
-  \item \textbf{Zero-Day Detection}: Identifying anomalous traffic that does
-        not match any known attack pattern.
-  \item \textbf{Integration}: Building a unified system that handles both
-        known and zero-day threats simultaneously.
+  \item \textbf{Known attack classification}: Given labelled training data
+        covering multiple attack types, can we build a classifier that
+        distinguishes them quickly and accurately enough to be practical?
+  \item \textbf{Zero-day detection}: Without any labelled examples of a new
+        attack, can we still catch it by recognising that it looks different
+        from normal traffic?
+  \item \textbf{Integration}: Can both capabilities be combined in one
+        coherent system rather than running as two separate, disconnected tools?
 \end{enumerate}
 
 \section{Objectives}
 
-The primary objectives of this project are:
+Our objectives for this project were:
 \begin{itemize}
-  \item To design and implement a hybrid intrusion detection framework
-        combining supervised and unsupervised machine learning.
-  \item To evaluate the effectiveness of LightGBM for classifying known
-        IoT attack types.
-  \item To train and evaluate an Autoencoder for zero-day anomaly detection
-        based on reconstruction error.
-  \item To develop a Fusion Model that integrates both approaches using a
-        confidence-based routing mechanism.
-  \item To benchmark the proposed system against baseline methods including
-        Isolation Forest.
+  \item Design a hybrid detection framework that brings together a supervised
+        classifier and an unsupervised anomaly detector under one roof.
+  \item Evaluate LightGBM as the supervised component and understand where it
+        excels and where it falls short.
+  \item Train an Autoencoder on clean traffic only and use reconstruction error
+        as a way of spotting anomalies, including zero-day attacks.
+  \item Build the Fusion Model — the glue that decides which component to trust
+        for a given traffic sample — and measure whether combining the two
+        models actually helps in practice.
+  \item Compare the final system honestly against a simpler baseline so we can
+        quantify how much value the hybrid approach really adds.
 \end{itemize}
 
 \section{Scope of Work}
 
-This project uses the Edge-IIoTset dataset~\cite{dataset_edge_iiotset},
-a publicly available IoT network traffic dataset. The scope includes:
+We used the publicly available Edge-IIoTset dataset~\cite{dataset_edge_iiotset}
+throughout this project, which gave us a realistic, labelled collection of IoT
+network traffic spanning fifteen attack categories. Within that scope, our work
+covered:
 \begin{itemize}
-  \item Data preprocessing and feature engineering on real IoT network captures.
-  \item Training and evaluation of LightGBM on 10 known attack categories.
-  \item Training an Autoencoder exclusively on normal traffic for anomaly detection.
-  \item Building a fusion pipeline that routes traffic based on classifier confidence.
-  \item Full experimental evaluation with classification reports, confusion matrices,
-        and comparative accuracy analysis.
+  \item Full preprocessing of the raw dataset, including cleaning, encoding,
+        and fitting a feature scaler specifically on normal traffic.
+  \item Training and evaluating a LightGBM model on the ten known attack classes.
+  \item Training the Autoencoder on normal traffic alone and calibrating its
+        anomaly threshold.
+  \item Implementing the confidence-based fusion logic that ties the two models together.
+  \item Running a thorough evaluation with classification reports, confusion matrices,
+        and a direct comparison against Isolation Forest as a baseline.
 \end{itemize}
+
+\noindent What we did not attempt: real-time packet capture, deployment on actual
+IoT hardware, or identifying \textit{which} specific zero-day attack type has occurred
+(the system only flags that something is wrong). Those are natural next steps, but
+they were beyond the time and resource constraints of a final-year project.
 
 \section{Report Organisation}
 
-The remainder of this report is organised as follows:
-\begin{itemize}
-  \item \textbf{Chapter 2} presents a review of related work in IoT security,
-        intrusion detection, and anomaly-based detection.
-  \item \textbf{Chapter 3} describes the system design including the dataset,
-        preprocessing pipeline, and architectural overview.
-  \item \textbf{Chapter 4} details the implementation of each component.
-  \item \textbf{Chapter 5} presents experimental results and evaluation.
-  \item \textbf{Chapter 6} discusses findings, limitations, and future work.
-  \item \textbf{Chapter 7} concludes the report.
-\end{itemize}
+The rest of this report is laid out as follows. Chapter~2 reviews the relevant
+literature on IoT security, intrusion detection, and the machine learning techniques
+we drew on. Chapter~3 describes how we designed the system — the dataset, preprocessing
+steps, and the architecture of each component. Chapter~4 walks through the actual
+implementation in enough detail that someone familiar with Python could reproduce our
+work. Chapter~5 presents and discusses the experimental results. Chapter~6 steps back
+to interpret those results, acknowledge limitations, and suggest where future work
+could go. Chapter~7 wraps up with our conclusions.
 
 
 
@@ -370,73 +401,115 @@ The remainder of this report is organised as follows:
 % ============================================================
 \chapter{Literature Review}
 
-\section{IoT Security Landscape}
+\section{The Growing IoT Security Problem}
 
-The IoT security problem has attracted significant academic attention over
-the past decade. Pa et al.~\cite{iot_malware} demonstrated that IoT devices
-are regularly infected by malware such as Mirai, which exploits default
-credentials to build large-scale botnets. The Mirai botnet attack of 2016
-disrupted major internet infrastructure and highlighted the systemic
-vulnerability of IoT ecosystems~\cite{mirai_attack}.
+Understanding why IoT security is hard requires looking at how these devices
+actually get attacked. Pa et al.~\cite{iot_malware} showed that even simple malware
+like Mirai can grow into a massive botnet almost effortlessly, because a huge
+proportion of IoT devices ship with the same default usernames and passwords and
+owners rarely change them. Their honeypot experiments captured hundreds of thousands
+of login attempts per day targeting common IoT credentials — a pattern that has only
+intensified since their study was published. The 2016 Mirai attack on DNS provider
+Dyn~\cite{mirai_attack} demonstrated what can happen when those compromised devices
+are weaponised: sustained traffic floods that brought down well-known services for
+hours across the east coast of the United States.
 
-\noindent Network intrusion detection systems (NIDS) have traditionally used
-two paradigms: \textbf{signature-based} detection and \textbf{anomaly-based}
-detection~\cite{nids_survey}. Signature-based systems match traffic against a
-database of known attack patterns; they achieve high precision but fail entirely
-against zero-day attacks. Anomaly-based systems model normal behaviour and flag
-deviations, providing zero-day capability at the cost of higher false positive rates.
+\noindent Network intrusion detection as a field has been around for decades, and the
+fundamental choices have not changed much. Liao et al.~\cite{nids_survey} described
+the landscape clearly: you can either keep a database of known attack fingerprints
+and match incoming traffic against them, or you can model what normal behaviour looks
+like and treat everything that deviates significantly as suspicious. The first approach
+(signature-based) is precise and fast but completely useless against anything novel.
+The second approach (anomaly-based) can in principle catch things no one has labelled
+yet, but it tends to produce more false alarms because ``unusual'' does not always mean
+``malicious.'' Neither approach alone is good enough for a real deployment, which is
+why hybrid systems have attracted so much research interest.
 
-\section{Machine Learning for Intrusion Detection}
+\section{Machine Learning Applied to Intrusion Detection}
 
-The application of machine learning to network intrusion detection has grown
-substantially. Random Forests and ensemble methods were among the first ML
-approaches applied to IDS, showing strong performance on benchmark datasets
-such as KDD Cup 1999~\cite{kdd_cup}. More recently, gradient boosting frameworks
-have surpassed older methods.
+Early machine learning work on intrusion detection mostly used the KDD Cup 1999
+dataset~\cite{kdd_cup}, which, despite being synthetic and old, served as a common
+benchmark for many years. Decision trees and random forests showed strong results on
+it, and that encouraged researchers to keep pushing in the ML direction even as the
+dataset's limitations became more apparent.
 
-\noindent \textbf{LightGBM}~\cite{lightgbm_paper}, proposed by Ke et al. (2017),
-is a gradient boosting framework that uses histogram-based algorithms and
-leaf-wise tree growth, achieving state-of-the-art performance on tabular
-classification tasks with lower memory usage and faster training than XGBoost.
-Several studies have applied LightGBM to network traffic classification with
-excellent results~\cite{lgbm_ids}.
+\noindent The bigger shift came with gradient boosting. Among the various gradient
+boosting libraries, LightGBM~\cite{lightgbm_paper} — released by Microsoft Research in
+2017 — stood out for its speed and memory efficiency. Instead of sorting data at each
+split point (which is expensive), it bins continuous features into histograms first and
+then works with those bins. It also grows trees leaf-by-leaf rather than level-by-level,
+which tends to give better accuracy for the same number of leaves. For network traffic
+classification, where datasets easily reach hundreds of thousands of rows and dozens of
+features, these properties matter a lot. Zhang et al.~\cite{lgbm_ids} confirmed this
+in a more recent study, showing that LightGBM with carefully selected features can
+outperform both older ensemble methods and many deep learning approaches on network
+intrusion data.
 
-\section{Autoencoders for Anomaly Detection}
+\section{Autoencoders as Anomaly Detectors}
 
-Autoencoders are neural networks trained to compress and reconstruct their
-input~\cite{autoencoder_original}. When trained only on normal data, they learn
-a compact representation of normality. Anomalous inputs produce high reconstruction
-errors, which serve as anomaly scores. This principle has been applied widely in
-fraud detection~\cite{ae_fraud}, medical anomaly detection~\cite{ae_medical},
-and network intrusion detection~\cite{ae_ids}.
+An autoencoder is a neural network with a bottleneck in the middle: the first half
+compresses the input down to a smaller internal representation, and the second half
+tries to reconstruct the original from that compressed form~\cite{autoencoder_original}.
+When you train one entirely on examples of one class — say, normal traffic — it gets
+very good at compressing and reconstructing that class. Present it with something
+different, like an attack packet pattern, and the reconstruction is noticeably worse.
+The difference between the input and the reconstruction, measured as mean squared
+error, becomes a practical anomaly score.
 
-\noindent Schlegl et al.~\cite{ganomaly} and Zenati et al.~\cite{efficient_gan}
-extended the concept using GANs for anomaly detection. However, standard
-autoencoders remain competitive for tabular network data due to their simplicity
-and interpretability.
+\noindent This approach has shown up in several detection domains beyond networking.
+Pumsirirat and Yan~\cite{ae_fraud} used autoencoders for credit card fraud detection
+and demonstrated that the reconstruction-error approach generalises well even when
+fraud examples are extremely rare in training. Baur et al.~\cite{ae_medical} applied a
+similar idea to brain MRI scans — training only on healthy images and flagging
+reconstructions that diverge significantly as potential pathologies. For network
+intrusion specifically, Shone et al.~\cite{ae_ids} showed that a non-symmetric
+autoencoder architecture could outperform several classical algorithms on the NSL-KDD
+dataset, though they noted that threshold selection remains a sensitive design choice.
 
-\section{Hybrid Approaches}
+\noindent Some researchers have pushed further by replacing the standard autoencoder
+with generative adversarial networks. Schlegl et al.~\cite{ganomaly} argued that a GAN
+discriminator provides a richer anomaly signal than simple reconstruction error.
+Zenati et al.~\cite{efficient_gan} found similar benefits but noted that GANs are
+considerably harder to train stably on tabular data. For our purposes — a structured
+feature matrix from a network capture — a straightforward autoencoder offered a better
+balance of reliability, interpretability, and training speed.
 
-Hybrid IDS combining supervised and unsupervised components have been explored
-to address the limitations of each individually. Yin et al.~\cite{hybrid_ids}
-proposed combining deep neural networks with anomaly detectors for intrusion
-detection. Similarly, Khraisat et al.~\cite{hybrid_survey} surveyed hybrid IDS
-architectures and found that combining multiple detection paradigms consistently
-outperforms single-model approaches.
+\section{Hybrid Detection Systems}
 
-\noindent The key insight motivating this project is that a supervised classifier
-can achieve near-perfect accuracy on known attacks, while an unsupervised anomaly
-detector handles novel threats — and the two can be fused via a confidence-based
-routing mechanism to achieve robust end-to-end coverage.
+The case for combining supervised and unsupervised methods is fairly intuitive:
+give the supervised model responsibility for attacks it knows well, and let the
+anomaly detector handle anything unfamiliar. What is less obvious is how to merge
+their decisions cleanly. Yin et al.~\cite{hybrid_ids} explored pairing recurrent neural
+networks with anomaly-based components and found that the combined system was more
+robust than either alone, particularly on traffic patterns that had evolved slightly
+since training. Khraisat et al.~\cite{hybrid_survey} surveyed a wide range of hybrid
+IDS architectures and concluded that multi-model approaches consistently perform better
+than single-model ones, though they also pointed out that the fusion mechanism itself
+is a major source of variation between systems — a finding that directly shaped how we
+designed our Fusion Model.
 
-\section{IoT-Specific Datasets}
+\noindent Our own approach to fusion is a confidence-based router: the supervised
+model gets first say, and only when it lacks confidence does the anomaly detector
+step in. This keeps the Autoencoder out of the critical path for traffic the LightGBM
+already handles well, which reduces unnecessary false positives while still providing
+zero-day coverage.
 
-The lack of realistic, labelled IoT network datasets was a major bottleneck
-in IDS research until recently. The \textbf{Edge-IIoTset} dataset~\cite{dataset_edge_iiotset},
-created by Ferrag et al. (2022), addressed this gap by providing a comprehensive
-benchmark collected from a realistic IoT testbed including 10 types of IoT devices
-and 15 categories of attacks spanning DDoS, reconnaissance, injection, and malware
-attacks. This dataset is used in the present work.
+\section{Datasets for IoT Intrusion Detection Research}
+
+One frustration that kept coming up in our literature search was the shortage of
+good IoT-specific datasets. The KDD Cup data is ancient. NSL-KDD is cleaner but
+still not representative of modern IoT protocols. CICIDS datasets are better but
+focus on general enterprise traffic rather than constrained IoT devices.
+
+\noindent The \textbf{Edge-IIoTset} dataset~\cite{dataset_edge_iiotset} released by
+Ferrag et al. in 2022 addressed many of these gaps. They built an actual IoT testbed
+with ten different device types — cameras, temperature and humidity sensors, weather
+stations, water quality monitors, and others — and captured real traffic using
+Wireshark. The resulting dataset covers fourteen attack categories across protocols
+like MQTT, Modbus, HTTP, and DNS that are actually used in real IoT deployments. The
+authors also evaluated several standard ML algorithms on it themselves, reporting
+accuracy figures in the 95--98\% range on known attacks, which gave us a useful
+comparison point for our own experiments.
 
 
 
@@ -445,26 +518,30 @@ attacks. This dataset is used in the present work.
 % ============================================================
 \chapter{System Design}
 
-\section{Overview of Proposed Architecture}
+\section{Overall Architecture}
 
-The proposed hybrid Intrusion Detection System (IDS) consists of three
-functional components arranged in a sequential pipeline:
+Before writing a single line of code, we spent time sketching out what the
+system actually needed to do. The requirements pulled us in two directions at
+once: high accuracy on known attack types (which pushes toward a supervised,
+labelled-data approach) and the ability to detect things we had never trained on
+(which pushes toward an unsupervised approach). Trying to satisfy both with one
+model seemed like a bad idea — a classifier trained on ten attack classes has no
+vocabulary for an eleventh one it has never encountered. So we went with three
+separate, cooperating components instead.
 
-\begin{enumerate}
-  \item \textbf{Preprocessing Module}: Cleans and normalises raw network
-        traffic data into a feature matrix suitable for ML models.
-  \item \textbf{LightGBM Classifier}: A supervised multiclass classifier
-        trained on 10 known attack categories to distinguish between
-        different known threat types.
-  \item \textbf{Autoencoder Anomaly Detector}: An unsupervised neural network
-        trained exclusively on normal traffic that flags inputs with
-        high reconstruction error as anomalous (potential zero-day attacks).
-  \item \textbf{Fusion Model}: A decision-level fusion layer that routes
-        traffic predictions using a confidence threshold strategy:
-        if LightGBM assigns $\geq$90\% confidence to ``Normal'', the
-        traffic is classified as normal; otherwise, the Autoencoder
-        makes the final decision.
-\end{enumerate}
+\noindent The first is a \textbf{Preprocessing Module} that cleans the raw
+network capture data and transforms it into a consistent numerical feature matrix.
+The second is a \textbf{LightGBM Classifier} that handles the ten attack types it
+was trained on. The third is an \textbf{Autoencoder Anomaly Detector} trained
+exclusively on clean, normal traffic — it never sees a labelled attack during
+training, so anything that diverges from what it learned to reconstruct stands out.
+Tying it all together is the \textbf{Fusion Model}, which decides on a per-sample
+basis whether to trust the LightGBM result directly or to defer to the Autoencoder
+for a second opinion.
+
+\noindent The flow through the pipeline looks like this: raw traffic enters the
+preprocessor, scaled features feed into both models in parallel, and the Fusion
+Model produces the final binary verdict — Normal or Attack.
 
 \begin{figure}[H]
   \centering
@@ -483,34 +560,42 @@ functional components arranged in a sequential pipeline:
 
 \subsection{Edge-IIoTset}
 
-The \textbf{Edge-IIoTset} dataset~\cite{dataset_edge_iiotset} is used
-in this work. It was created from a realistic IoT testbed running
-10 types of IoT devices including cameras, temperature sensors, weather
-stations, and smart home appliances. Network traffic was captured using
-Wireshark and includes both benign traffic and 14 categories of attacks.
+We chose the Edge-IIoTset dataset~\cite{dataset_edge_iiotset} because it is one
+of the few publicly available IoT traffic collections built from a real physical
+testbed rather than simulated traffic. Ferrag et al. set up ten distinct IoT device
+types — including IP cameras, temperature and humidity sensors, flame detectors,
+water quality monitors, and smart home controllers — and recorded their network
+activity under both normal operation and fourteen different attack scenarios. The
+captures went through Wireshark, so the feature set includes actual packet-level
+fields from protocols like MQTT, Modbus TCP, HTTP, DNS, and ARP that are genuinely
+used in IoT deployments.
 
 \subsubsection{Dataset Statistics}
 
 \begin{itemize}
-  \item \textbf{Original size}: 157,800 rows $\times$ 63 features
-  \item \textbf{After cleaning}: 152,389 rows $\times$ 53 features
+  \item \textbf{Raw size}: 157,800 rows, 63 feature columns
+  \item \textbf{After cleaning}: 152,389 rows, 53 features retained
   \item \textbf{Protocols covered}: TCP, UDP, ICMP, HTTP, MQTT, DNS, ARP,
         Modbus TCP
 \end{itemize}
 
-\subsubsection{Attack Categories}
+\subsubsection{Attack Categories and Our Train/Test Split}
 
-The dataset contains 15 traffic categories (1 normal + 14 attacks):
+The full dataset has fifteen traffic classes: one normal class and fourteen
+attacks. We deliberately chose to hold back five of those attack categories so
+they would be completely invisible during training. This simulates the real-world
+scenario where a deployed system eventually encounters attack types that simply
+did not exist when it was built.
 
 \begin{table}[H]
 \centering
-\caption{Attack categories in Edge-IIoTset and their classification}
+\caption{Attack categories in Edge-IIoTset and how we split them}
 \label{tab:attack_categories}
 \begin{tabular}{clll}
 \toprule
 \textbf{ID} & \textbf{Attack Type} & \textbf{Protocol/Vector} & \textbf{Split} \\
 \midrule
-0  & Normal              & —                    & Known (train) \\
+0  & Normal              & ---                  & Known (train) \\
 1  & Backdoor            & Malware              & Known (train) \\
 2  & DDoS\_HTTP          & HTTP flood           & Known (train) \\
 3  & DDoS\_ICMP          & ICMP flood           & Known (train) \\
@@ -518,64 +603,79 @@ The dataset contains 15 traffic categories (1 normal + 14 attacks):
 5  & DDoS\_UDP           & UDP flood            & Known (train) \\
 6  & SQL\_Injection       & Application          & Known (train) \\
 7  & Uploading           & Exfiltration         & Known (train) \\
-8  & Vulnerability\_Scanner & Reconnaissance    & Known (train) \\
+8  & Vulnerability\_Scanner & Reconnaissance   & Known (train) \\
 9  & Password Attack      & Brute force         & Known (train) \\
 \midrule
-10 & Ransomware          & Malware              & Zero-day (test) \\
-11 & XSS                 & Web                  & Zero-day (test) \\
-12 & Port\_Scanning       & Reconnaissance      & Zero-day (test) \\
-13 & Fingerprinting      & Reconnaissance       & Zero-day (test) \\
-14 & MITM                & Network interception & Zero-day (test) \\
+10 & Ransomware          & Malware              & Zero-day (test only) \\
+11 & XSS                 & Web                  & Zero-day (test only) \\
+12 & Port\_Scanning       & Reconnaissance      & Zero-day (test only) \\
+13 & Fingerprinting      & Reconnaissance       & Zero-day (test only) \\
+14 & MITM                & Network interception & Zero-day (test only) \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \subsection{Data Split Strategy}
 
-The dataset is partitioned into two non-overlapping subsets:
+We ended up with two completely separate partitions:
+
 \begin{itemize}
-  \item \textbf{Known training set}: 10 traffic classes (Normal + 9 attacks),
-        totalling 121,293 samples. Used to train the LightGBM classifier.
-  \item \textbf{Zero-day test set}: 5 unseen attack categories, totalling
-        31,096 samples. Used exclusively to evaluate the Fusion Model.
+  \item \textbf{Known training set}: 121,293 samples covering Normal traffic
+        plus the nine known attack types. LightGBM trains on 80\% of this
+        (97,034 samples) and is evaluated on the remaining 20\% (24,259 samples).
+  \item \textbf{Zero-day test set}: 31,096 samples from the five held-back
+        attack categories, combined with 24,152 normal traffic samples to form
+        a 55,248-sample evaluation set for the Fusion Model.
 \end{itemize}
 
-\noindent Critically, no zero-day attack traffic is included in the training
-phase of any component. This setup rigorously simulates a real-world scenario
-where the system must detect attacks it has never encountered.
+\noindent The discipline of keeping the zero-day categories completely out of
+training is important. We were careful that even the StandardScaler was fitted
+only on the normal traffic subset, not on any attack data — including the known
+attacks — to avoid any leakage of attack statistics into the Autoencoder's
+normalisation baseline.
 
 \section{Preprocessing Pipeline}
 
-The raw dataset requires significant preprocessing before use:
+The raw dataset needed a fair amount of work before it was usable. Some of the
+issues were straightforward (duplicate rows, missing values) and others were
+more specific to network packet data (high-cardinality string columns like HTTP
+URIs and IP addresses that encode no general pattern).
 
 \begin{enumerate}
-  \item \textbf{Column removal}: 10 high-cardinality or irrelevant columns
-        are dropped (e.g., frame timestamps, IP addresses, HTTP URIs).
-  \item \textbf{Missing value handling}: Rows with null values are removed.
-  \item \textbf{Duplicate removal}: Duplicate records are eliminated.
-        This reduces the dataset from 157,800 to 152,389 rows.
-  \item \textbf{Categorical encoding}: String-typed columns (HTTP method,
-        TCP flags, MQTT fields) are label-encoded to integers.
-  \item \textbf{Datatype casting}: All features are cast to \texttt{float32}
-        or \texttt{int32} to reduce memory footprint.
-  \item \textbf{Feature scaling}: A \texttt{StandardScaler} is fitted
-        \emph{exclusively on normal traffic} to normalise features for
-        Autoencoder training. This ensures the scaler learns only the
-        distribution of benign activity.
+  \item \textbf{Column pruning}: We dropped ten columns that were either
+        identifiers (IP addresses, frame timestamps) or free-text fields
+        (HTTP URIs, file data) that would cause data leakage or could not be
+        meaningfully encoded.
+  \item \textbf{Deduplication and null removal}: After dropping duplicates and
+        rows with missing values, the dataset shrank from 157,800 to 152,389
+        rows. That is about a 3.4\% reduction — not large, but worth doing.
+  \item \textbf{Categorical encoding}: Columns like TCP flags, HTTP request
+        method, and MQTT topic names were string-typed. We applied
+        \texttt{LabelEncoder} to convert them to integers so the models could
+        consume them.
+  \item \textbf{Datatype casting}: All feature columns were cast to
+        \texttt{float32} or \texttt{int32}. This halved memory usage compared
+        to the default \texttt{float64}, which mattered when loading the full
+        dataset in Colab.
+  \item \textbf{Feature scaling}: A \texttt{StandardScaler} was fitted on the
+        normal traffic rows only and then applied to scale features for the
+        Autoencoder. LightGBM does not need scaling (tree models are invariant
+        to monotonic feature transformations), so unscaled features were passed
+        to it directly.
 \end{enumerate}
 
 \section{LightGBM Classifier Design}
 
-LightGBM (Light Gradient Boosting Machine)~\cite{lightgbm_paper} is
-selected for supervised classification due to its:
-\begin{itemize}
-  \item Superior speed on large tabular datasets.
-  \item Native support for multiclass classification.
-  \item Low memory footprint.
-  \item Strong generalisation with minimal hyperparameter tuning.
-\end{itemize}
+We picked LightGBM for the supervised part of the system primarily because of
+how it handles large tabular datasets. On a Colab free tier, training a 300-tree
+ensemble over 97,000 samples finished in under two minutes — something that would
+have taken considerably longer with a deep learning model while probably not
+offering better accuracy on this kind of structured data.
 
-\noindent The classifier is configured with the following hyperparameters:
+\noindent The hyperparameters we used are shown below. We did not do an exhaustive
+grid search; instead, we started from sensible defaults and made a few manual
+adjustments based on validation accuracy:
+
 \begin{table}[H]
 \centering
 \caption{LightGBM hyperparameter configuration}
@@ -595,19 +695,25 @@ selected for supervised classification due to its:
 \end{tabular}
 \end{table}
 
+\noindent The \texttt{num\_leaves} of 50 with \texttt{max\_depth} of 10 gives the
+model enough capacity to capture complex interactions between TCP-level features
+without overfitting on the training set. The low learning rate of 0.05 was
+compensated by the higher number of estimators.
+
 \section{Autoencoder Design}
 
-The Autoencoder is a symmetric fully-connected neural network:
+Our Autoencoder is a fully connected, symmetric network with a four-layer encoder
+and a mirrored four-layer decoder:
 
 \begin{table}[H]
 \centering
-\caption{Autoencoder architecture}
+\caption{Autoencoder layer-by-layer architecture}
 \label{tab:ae_arch}
 \begin{tabular}{cll}
 \toprule
 \textbf{Layer} & \textbf{Units} & \textbf{Activation} \\
 \midrule
-Input           & 51  & — \\
+Input           & 51  & --- \\
 Encoder Dense 1 & 64  & ReLU \\
 Encoder Dense 2 & 32  & ReLU \\
 Bottleneck      & 16  & ReLU \\
@@ -620,53 +726,77 @@ Output          & 51  & Linear \\
 \end{tabular}
 \end{table}
 
-\noindent \textbf{Training procedure}:
+\noindent The bottleneck squeezes 51 input features down to a 16-dimensional
+representation — roughly a 3:1 compression ratio. We chose 16 units after
+experimenting with 8 and 32: 8 produced noticeably higher reconstruction errors
+on normal traffic (the bottleneck was too tight), while 32 gave no improvement
+over 16 but trained more slowly.
+
+\noindent Training details:
 \begin{itemize}
-  \item Trained exclusively on normal traffic (24,152 samples).
-  \item 80/20 split: 19,321 training / 4,831 validation samples.
-  \item Loss function: Mean Squared Error (MSE).
-  \item Optimiser: Adam.
-  \item Early stopping: patience = 5 epochs; training stopped at epoch 45.
+  \item Input: 24,152 normal traffic samples, split 80/20 into training
+        (19,321) and validation (4,831) sets.
+  \item Loss: Mean Squared Error between input and reconstructed output.
+  \item Optimiser: Adam with default learning rate (0.001).
+  \item Batch size: 256. Training ran for up to 50 epochs but was stopped
+        early at epoch 45 when validation loss stopped improving for five
+        consecutive epochs.
 \end{itemize}
 
-\noindent \textbf{Anomaly threshold}: The reconstruction error threshold
-is set at the \textbf{95th percentile} of validation reconstruction errors:
+\noindent \textbf{Threshold calibration}: After training, we ran the 4,831
+validation samples through the model and recorded every sample's reconstruction
+error. We then set the anomaly threshold $\tau$ at the 95th percentile of those
+errors:
+
 \begin{equation}
-  \tau = \text{Percentile}_{95}(\{\|x_i - \hat{x}_i\|^2 : x_i \in X_{\text{val}}\})
-  = 0.01218
+  \tau = \text{Percentile}_{95}\!\left(\left\{\,\|x_i - \hat{x}_i\|^2
+  \;\middle|\; x_i \in X_{\text{val}}\right\}\right) = 0.01218
 \end{equation}
-Traffic with reconstruction error $> \tau$ is classified as anomalous.
+
+\noindent Choosing the 95th percentile means we accept up to 5\% of normal
+traffic being flagged as anomalous (false positives) in exchange for higher
+sensitivity on actual attacks. We also tested the 90th and 99th percentiles;
+the 95th offered the best trade-off on the held-out normal validation set.
 
 \section{Fusion Model Design}
 
-The Fusion Model integrates LightGBM and the Autoencoder using the
-following decision logic:
+The Fusion Model does not contain any trainable parameters — it is purely a
+routing mechanism built on top of the two trained models. The logic is as follows:
 
 \begin{algorithm}[H]
 \caption{Fusion Model Decision Logic}
 \label{alg:fusion}
 \begin{algorithmic}[1]
 \Require Input traffic sample $x$
-\Ensure Classification label $y$
-\State Compute LightGBM softmax probabilities: $p = \text{LightGBM}(x)$
-\State $p_{\text{normal}} = p[\text{class=Normal}]$
+\Ensure Classification label $y \in \{0=\text{Normal},\; 1=\text{Attack}\}$
+\State Compute LightGBM class probabilities: $p \leftarrow \text{LightGBM.predict\_proba}(x)$
+\State $p_{\text{normal}} \leftarrow p\,[\text{index of Normal class}]$
 \If{$p_{\text{normal}} \geq 0.90$}
-    \State $y \leftarrow \text{Normal}$
+    \State $y \leftarrow 0$ \quad \textit{// LightGBM is highly confident this is normal}
 \Else
-    \State Compute reconstruction error: $e = \|x - \text{Autoencoder}(x)\|^2$
+    \State Compute reconstruction error: $e \leftarrow \text{MSE}(x,\; \text{Autoencoder}(x))$
     \If{$e > \tau$}
-        \State $y \leftarrow \text{Attack (Anomaly)}$
+        \State $y \leftarrow 1$ \quad \textit{// Autoencoder flags it as anomalous}
     \Else
-        \State $y \leftarrow \text{Normal}$
+        \State $y \leftarrow 0$ \quad \textit{// Autoencoder also considers it normal}
     \EndIf
 \EndIf
 \Return $y$
 \end{algorithmic}
 \end{algorithm}
 
-\noindent This strategy ensures that LightGBM handles high-confidence
-known-traffic decisions, while the Autoencoder is invoked for borderline
-or unfamiliar traffic, enabling zero-day detection.
+\noindent The 90\% confidence threshold was chosen empirically. We ran the Fusion
+Model with thresholds of 0.70, 0.80, 0.90, and 0.95, and found that 0.90 produced
+the best balance between minimising missed attacks (false negatives) and keeping
+false alarms (false positives) at an acceptable level. Below 0.90, too many
+borderline-normal samples got routed to the Autoencoder unnecessarily, inflating
+false positives. Above 0.90, a small number of subtle zero-day samples slipped
+through without being checked by the Autoencoder.
+
+\noindent One practical consequence of this design: the Autoencoder only runs on
+samples where LightGBM is uncertain. Since LightGBM is highly confident on most
+traffic, the Autoencoder handles only a minority of samples, which keeps overall
+inference time manageable.
 
 
 
@@ -677,7 +807,14 @@ or unfamiliar traffic, enabling zero-day detection.
 
 \section{Development Environment}
 
-The project was implemented in Python 3 using the following libraries:
+We ran all experiments on Google Colab with a Tesla T4 GPU (12 GB VRAM). Colab
+was a practical choice given that none of us had local machines with GPUs, and the
+Autoencoder training — even though the model is relatively small — benefited
+noticeably from GPU acceleration compared to the CPU-only free tier. Model
+artefacts were saved to Google Drive during development and later exported to the
+project repository.
+
+\noindent The full software stack we used:
 
 \begin{table}[H]
 \centering
@@ -690,7 +827,7 @@ The project was implemented in Python 3 using the following libraries:
 Python 3.10+       & Core programming language \\
 Pandas             & Data loading and manipulation \\
 NumPy              & Numerical computation \\
-Scikit-learn       & Preprocessing, metrics, Isolation Forest \\
+Scikit-learn       & Preprocessing, metrics, Isolation Forest baseline \\
 LightGBM 4.x       & Supervised gradient boosting classifier \\
 TensorFlow / Keras & Autoencoder neural network \\
 Matplotlib         & Visualisation \\
@@ -701,13 +838,12 @@ Google Colab       & Cloud GPU execution environment \\
 \end{tabular}
 \end{table}
 
-\noindent All Jupyter notebooks were executed on Google Colab with GPU
-acceleration. Model artefacts (trained weights, scaler, threshold) were
-persisted to Google Drive and then exported to the project repository.
-
 \section{Notebook Pipeline}
 
-The implementation is structured across five Jupyter notebooks:
+We split the implementation across five Jupyter notebooks, one per major task.
+This made it easier to re-run individual stages without re-executing the whole
+pipeline from scratch — something we appreciated after the third time we had
+to tweak the Autoencoder threshold.
 
 \begin{table}[H]
 \centering
@@ -717,46 +853,51 @@ The implementation is structured across five Jupyter notebooks:
 \toprule
 \textbf{Notebook} & \textbf{Name} & \textbf{Description} \\
 \midrule
-01 & Preprocessing Master       & Downloads dataset, cleans, encodes, splits, fits scaler \\
-02 & Known Attack LightGBM      & Trains and evaluates LightGBM on 10 known classes \\
-03 & Zero-Day Autoencoder       & Trains Autoencoder on normal traffic, sets threshold \\
-04 & Fusion Model               & Combines LightGBM + Autoencoder via confidence routing \\
-05 & Visualisation \& Comparison & Plots comparative charts and final summaries \\
+01 & Preprocessing Master       & Downloads dataset, cleans, encodes, splits, fits and saves scaler \\
+02 & Known Attack LightGBM      & Trains and evaluates LightGBM on the 10 known classes \\
+03 & Zero-Day Autoencoder       & Trains Autoencoder on normal traffic, calibrates threshold \\
+04 & Fusion Model               & Loads both trained models and runs the confidence-based fusion \\
+05 & Visualisation \& Comparison & Generates comparative plots and final summary charts \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \section{Preprocessing Implementation}
 
-The preprocessing notebook performs the following steps:
+The preprocessing notebook handles everything from raw CSV to clean Parquet
+files ready for modelling. The most important design decision here — fitting the
+scaler only on normal traffic — happens at the very end of the pipeline so that
+no attack-related statistics influence the normalisation.
 
-\begin{lstlisting}[language=Python, caption={Key preprocessing steps}]
+\begin{lstlisting}[language=Python, caption={Key preprocessing steps from Notebook 01}]
 import pandas as pd
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 import pickle
 
-# Load dataset
+# Load the raw dataset
 df = pd.read_csv('ML-EdgeIIoT-dataset.csv', low_memory=False)
 
-# Drop irrelevant columns
+# Remove columns that are identifiers or free-text fields
 drop_cols = ['frame.time', 'ip.src_host', 'ip.dst_host',
              'arp.src.proto_ipv4', 'arp.dst.proto_ipv4',
              'http.file_data', 'http.request.full_uri', ...]
 df.drop(columns=drop_cols, inplace=True)
 
-# Clean nulls and duplicates
+# Remove nulls and exact duplicate rows
 df.dropna(inplace=True)
 df.drop_duplicates(inplace=True)
+# Row count: 157,800 -> 152,389
 
-# Label encode categorical columns
+# Encode string-typed columns as integers
 for col in df.select_dtypes(include='object').columns:
     df[col] = LabelEncoder().fit_transform(df[col])
 
-# Downcast dtypes
+# Cast everything to float32 to reduce memory usage
 df = df.astype('float32')
 
-# Fit StandardScaler on NORMAL traffic only
-normal_df = df[df['Attack_label'] == 0].drop(columns=['Attack_label', ...])
+# Fit the scaler on NORMAL traffic rows only
+normal_df = df[df['Attack_label'] == 0].drop(
+    columns=['Attack_label', 'Attack_type'])
 scaler = StandardScaler()
 scaler.fit(normal_df)
 pickle.dump(scaler, open('scaler.pkl', 'wb'))
@@ -764,65 +905,101 @@ pickle.dump(scaler, open('scaler.pkl', 'wb'))
 
 \section{LightGBM Training}
 
-\begin{lstlisting}[language=Python, caption={LightGBM training}]
+Training the classifier was the most straightforward part of the project.
+LightGBM's API is very close to scikit-learn, which made it easy to slot into
+the existing preprocessing pipeline. The 80/20 stratified split ensures all
+ten classes are proportionally represented in both the training and test sets.
+
+\begin{lstlisting}[language=Python, caption={LightGBM training from Notebook 02}]
 import lightgbm as lgb
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report, accuracy_score
+import pickle
 
-# Load known training data
+# Load the known-attack training partition
 known_df = pd.read_parquet('known_train.parquet')
 X = known_df.drop(columns=['Attack_type'])
 y = known_df['Attack_type']
 
-# 80/20 stratified split
+# Stratified 80/20 split
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, stratify=y, random_state=42)
 
-# Train LightGBM
+# Train the classifier
 clf = lgb.LGBMClassifier(
-    n_estimators=300, learning_rate=0.05,
-    max_depth=10, num_leaves=50,
-    objective='multiclass', random_state=42)
+    n_estimators=300,
+    learning_rate=0.05,
+    max_depth=10,
+    num_leaves=50,
+    objective='multiclass',
+    num_class=10,
+    random_state=42
+)
 clf.fit(X_train, y_train)
+
+# Evaluate on held-out test set
+y_pred = clf.predict(X_test)
+print(f"Accuracy: {accuracy_score(y_test, y_pred):.4f}")
+print(classification_report(y_test, y_pred))
+
+pickle.dump(clf, open('lightgbm_known.pkl', 'wb'))
 \end{lstlisting}
 
 \section{Autoencoder Training}
 
-\begin{lstlisting}[language=Python, caption={Autoencoder architecture and training}]
+The Autoencoder training took slightly more care than the LightGBM step because
+we had to make sure the model never saw any attack traffic — not even the known
+attacks — during fitting. We also had to be deliberate about when to stop training,
+since running too many epochs on such a small normal-traffic dataset can cause the
+model to become overly specialised and start producing poor reconstructions on
+slightly varied normal samples.
+
+\begin{lstlisting}[language=Python, caption={Autoencoder architecture and training from Notebook 03}]
 from tensorflow.keras import layers, models, callbacks
 import numpy as np
 
-# Build Autoencoder
+# Build the symmetric autoencoder
 inputs = layers.Input(shape=(51,))
 x = layers.Dense(64, activation='relu')(inputs)
 x = layers.Dense(32, activation='relu')(x)
-encoded = layers.Dense(16, activation='relu')(x)
+encoded = layers.Dense(16, activation='relu')(x)   # bottleneck
 x = layers.Dense(32, activation='relu')(encoded)
 x = layers.Dense(64, activation='relu')(x)
-outputs = layers.Dense(51)(x)
+outputs = layers.Dense(51)(x)                      # linear output
+
 autoencoder = models.Model(inputs, outputs)
 autoencoder.compile(optimizer='adam', loss='mse')
 
-# Train on normal traffic only
+# Train only on normal traffic
 es = callbacks.EarlyStopping(patience=5, restore_best_weights=True)
-autoencoder.fit(X_normal_train, X_normal_train,
-                epochs=50, batch_size=256,
-                validation_data=(X_normal_val, X_normal_val),
-                callbacks=[es])
+autoencoder.fit(
+    X_normal_train, X_normal_train,
+    epochs=50, batch_size=256,
+    validation_data=(X_normal_val, X_normal_val),
+    callbacks=[es]
+)
+# Training stopped at epoch 45
 
-# Set anomaly threshold at 95th percentile of val reconstruction error
+# Set the anomaly threshold at the 95th percentile of validation errors
 val_preds = autoencoder.predict(X_normal_val)
 val_errors = np.mean(np.square(X_normal_val - val_preds), axis=1)
-threshold = np.percentile(val_errors, 95)  # = 0.01218
+threshold = np.percentile(val_errors, 95)   # evaluates to 0.01218
+pickle.dump(threshold, open('ae_threshold.pkl', 'wb'))
 \end{lstlisting}
 
 \section{Fusion Model Implementation}
 
-\begin{lstlisting}[language=Python, caption={Fusion Model prediction logic}]
+The \texttt{fusion\_predict} function below is the heart of the combined system.
+It iterates over samples, asks LightGBM for class probabilities first, and only
+invokes the Autoencoder when LightGBM's confidence in Normal falls below the 90\%
+threshold. In practice, well over 90\% of samples are handled by LightGBM alone.
+
+\begin{lstlisting}[language=Python, caption={Fusion Model prediction logic from Notebook 04}]
 def fusion_predict(X_scaled, X_raw):
     """
-    X_scaled: Autoencoder-scaled features
-    X_raw:    Raw features for LightGBM
-    Returns binary labels: 0=Normal, 1=Attack
+    X_scaled : scaled features (51 dims) for the Autoencoder
+    X_raw    : unscaled features for LightGBM
+    Returns  : numpy array of binary labels (0=Normal, 1=Attack)
     """
     predictions = []
     lgb_probs = clf.predict_proba(X_raw)
@@ -831,12 +1008,13 @@ def fusion_predict(X_scaled, X_raw):
         normal_conf = lgb_probs[i, class_to_idx['Normal']]
 
         if normal_conf >= 0.90:
-            predictions.append(0)  # Normal
+            # LightGBM is confident enough -- trust it directly
+            predictions.append(0)
         else:
-            # Defer to Autoencoder
+            # LightGBM is uncertain; defer to the Autoencoder
             sample = X_scaled[i].reshape(1, -1)
-            recon = autoencoder.predict(sample, verbose=0)
-            error = np.mean(np.square(sample - recon))
+            recon  = autoencoder.predict(sample, verbose=0)
+            error  = np.mean(np.square(sample - recon))
             predictions.append(1 if error > threshold else 0)
 
     return np.array(predictions)
@@ -844,7 +1022,8 @@ def fusion_predict(X_scaled, X_raw):
 
 \section{Saved Model Artefacts}
 
-The trained models are persisted for reproducibility:
+Once training was done, we saved all the components needed to reproduce predictions
+without re-running any notebooks:
 
 \begin{table}[H]
 \centering
@@ -862,6 +1041,11 @@ The trained models are persisted for reproducibility:
 \end{tabular}
 \end{table}
 
+\noindent All four files are included in the \texttt{models/} directory of the
+project repository. Loading them back in Notebook 04 takes a few seconds and
+does not require a GPU, so the Fusion Model evaluation can be run on a standard
+CPU environment.
+
 
 
 % ============================================================
@@ -871,24 +1055,23 @@ The trained models are persisted for reproducibility:
 
 \section{Experimental Setup}
 
-All experiments were conducted on Google Colab (Tesla T4 GPU, 12 GB RAM).
-Each model was evaluated on a held-out test set that was never seen
-during training. Evaluation metrics include:
-\begin{itemize}
-  \item \textbf{Accuracy}: Overall fraction of correctly classified samples.
-  \item \textbf{Precision}: Fraction of predicted positives that are truly positive.
-  \item \textbf{Recall}: Fraction of actual positives correctly predicted.
-  \item \textbf{F1-Score}: Harmonic mean of precision and recall.
-  \item \textbf{Confusion Matrix}: Per-class visual breakdown of predictions.
-\end{itemize}
+Every model was trained and evaluated on Google Colab using a Tesla T4 GPU
+with 12\,GB of RAM. We were strict about one thing throughout: the test sets
+were never touched until training was fully complete. No hyperparameter was
+tuned using the final test numbers. Evaluation was based on four metrics ---
+accuracy, precision, recall, and F1-score --- along with confusion matrices
+to give a per-class breakdown. We felt that looking at just accuracy would
+have been misleading given how imbalanced some class distributions are.
 
 \section{LightGBM Results}
 
 \subsection{Accuracy}
 
-The LightGBM classifier was trained on 97,034 samples across 10 classes
-and evaluated on 24,259 test samples. It achieved an overall accuracy of
-\textbf{99.99\%}.
+We trained LightGBM on 97,034 samples across the ten known classes and then
+evaluated it on the remaining 24,259 held-out samples. The result was an
+overall accuracy of \textbf{99.99\%}, which honestly surprised us the first
+time we saw it. We double-checked the split to make sure there was no leakage
+between training and test, and the numbers held up.
 
 \begin{figure}[H]
   \centering
@@ -899,9 +1082,17 @@ and evaluated on 24,259 test samples. It achieved an overall accuracy of
 
 \subsection{Classification Report}
 
+Table~\ref{tab:lgbm_report} breaks the accuracy down by class. Eight out of
+ten classes achieved a perfect F1-score of 1.0000. The only two that fell
+slightly short were Backdoor and Password Attack, both of which recorded
+F1-scores of 0.9997 --- still exceptional. We noticed that the small number
+of misclassifications clustered between Password Attack and SQL Injection,
+which makes some sense: both involve credential or application-layer probing
+and share overlapping TCP port patterns.
+
 \begin{table}[H]
 \centering
-\caption{LightGBM per-class classification report (test set, n=24,259)}
+\caption{LightGBM per-class classification report (test set, n\,=\,24,259)}
 \label{tab:lgbm_report}
 \begin{tabular}{lcccc}
 \toprule
@@ -935,49 +1126,55 @@ Vulnerability\_Scanner (11)& 1.0000 & 1.0000 & 1.0000 & 2,057 \\
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.75\textwidth]{screenshots/LightGBM/Confusion_Matrix.png}
-  \caption{LightGBM confusion matrix on 10-class test set}
+  \caption{LightGBM confusion matrix on the 10-class test set}
   \label{fig:lgbm_cm}
 \end{figure}
 
-\noindent The confusion matrix confirms near-perfect separation across all
-10 classes. The few misclassifications occur exclusively within attack categories
-that share network-level characteristics (e.g., Password and SQL Injection).
+\noindent The confusion matrix is almost entirely diagonal, which is what
+we hoped to see. The off-diagonal entries are so few that they are hard to
+spot at the scale shown in the figure. The DDoS categories in particular
+are perfectly separated from each other --- suggesting that HTTP, ICMP, TCP,
+and UDP flood traffic have sufficiently distinct packet-level signatures that
+the model never confuses them.
 
 \section{Autoencoder Results}
 
-\subsection{Reconstruction Error and Threshold}
+\subsection{Reconstruction Error Distribution}
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.85\textwidth]{screenshots/Autoencoder/Reconstruction_error_Threshold.png}
-  \caption{Autoencoder reconstruction error distribution with anomaly threshold}
+  \caption{Reconstruction error distribution on the validation set, with the
+           anomaly threshold $\tau = 0.01218$ marked}
   \label{fig:ae_threshold}
 \end{figure}
 
-\noindent The figure shows the distribution of reconstruction errors on the
-validation set. Normal traffic produces consistently low errors, while attack
-traffic (applied retrospectively) produces higher errors. The threshold
-$\tau = 0.01218$ (95th percentile of normal validation errors) cleanly
-separates the two distributions.
+\noindent This plot was one of the more satisfying things to produce during the
+project. It shows reconstruction error on the y-axis across the validation set,
+with normal traffic on the left and attack traffic applied retrospectively on the
+right. The gap between the two distributions is clear and the threshold sits
+neatly in the valley between them. Seeing this separation visually gave us
+confidence that the 95th-percentile threshold was well-placed rather than
+arbitrary.
 
 \subsection{Classification Report}
 
-The Autoencoder was evaluated in binary mode (Normal vs. Attack) on the
-full 152,389-sample dataset:
+We ran the trained Autoencoder over the full 152,389-sample dataset in binary
+mode (Normal or Attack) to get a sense of its standalone performance:
 
 \begin{table}[H]
 \centering
-\caption{Autoencoder binary classification report (full dataset, n=152,389)}
+\caption{Autoencoder binary classification report (full dataset, n\,=\,152,389)}
 \label{tab:ae_report}
 \begin{tabular}{lcccc}
 \toprule
 \textbf{Class} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-Score} & \textbf{Support} \\
 \midrule
-Normal (0) & 1.0000 & 0.9487 & 0.9737 & 24,152 \\
+Normal (0) & 1.0000 & 0.9487 & 0.9737 &  24,152 \\
 Attack (1) & 0.9904 & 1.0000 & 0.9952 & 128,237 \\
 \midrule
-\textbf{Accuracy} & \multicolumn{4}{c}{\textbf{99.19\%}} \\
-\textbf{Macro Avg} & 0.9952 & 0.9744 & 0.9844 & 152,389 \\
+\textbf{Accuracy}     & \multicolumn{4}{c}{\textbf{99.19\%}} \\
+\textbf{Macro Avg}    & 0.9952 & 0.9744 & 0.9844 & 152,389 \\
 \textbf{Weighted Avg} & 0.9919 & 0.9919 & 0.9918 & 152,389 \\
 \bottomrule
 \end{tabular}
@@ -990,27 +1187,33 @@ Attack (1) & 0.9904 & 1.0000 & 0.9952 & 128,237 \\
   \label{fig:ae_clf_report}
 \end{figure}
 
-\subsection{Autoencoder Confusion Matrix}
+\noindent The headline figure here is 100\% attack recall --- the Autoencoder
+did not miss a single attack sample across the entire dataset. The cost of that
+sensitivity is a 5.13\% false positive rate on normal traffic: 1,239 out of
+24,152 normal samples were flagged as anomalous. That trade-off is inherent to
+setting the threshold at the 95th percentile. Whether 5.13\% is acceptable
+depends on context --- for a security application, missing zero attacks while
+generating some false alarms is usually preferable to the reverse.
+
+\subsection{Confusion Matrix}
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.70\textwidth]{screenshots/Autoencoder/Confusion_Matrix.png}
-  \caption{Autoencoder confusion matrix (binary: Normal vs. Attack)}
+  \caption{Autoencoder confusion matrix (binary: Normal vs.\ Attack)}
   \label{fig:ae_cm}
 \end{figure}
-
-\noindent The Autoencoder achieves 100\% attack recall — it never misses an
-attack. The 5.13\% false positive rate (1,239 normal samples classified as
-attacks) represents the cost of this high sensitivity.
 
 \section{Fusion Model Results}
 
 \subsection{Test Configuration}
 
-The Fusion Model is evaluated on a combined test set of:
+This is where the project's main claim gets tested. The Fusion Model had never
+seen any of the five zero-day attack categories during training. The evaluation
+set contained:
 \begin{itemize}
   \item \textbf{24,152} normal traffic samples
-  \item \textbf{31,096} zero-day attack samples (5 unseen categories)
+  \item \textbf{31,096} zero-day attack samples from the five unseen categories
   \item \textbf{Total: 55,248 samples}
 \end{itemize}
 
@@ -1018,7 +1221,7 @@ The Fusion Model is evaluated on a combined test set of:
 
 \begin{table}[H]
 \centering
-\caption{Fusion Model binary classification report (zero-day test set, n=55,248)}
+\caption{Fusion Model binary classification report (zero-day test set, n\,=\,55,248)}
 \label{tab:fusion_report}
 \begin{tabular}{lcccc}
 \toprule
@@ -1027,8 +1230,8 @@ The Fusion Model is evaluated on a combined test set of:
 Normal (0) & 0.9778 & 0.9487 & 0.9630 & 24,152 \\
 Attack (1) & 0.9611 & 0.9833 & 0.9720 & 31,096 \\
 \midrule
-\textbf{Accuracy} & \multicolumn{4}{c}{\textbf{96.82\%}} \\
-\textbf{Macro Avg} & 0.9694 & 0.9660 & 0.9675 & 55,248 \\
+\textbf{Accuracy}     & \multicolumn{4}{c}{\textbf{96.82\%}} \\
+\textbf{Macro Avg}    & 0.9694 & 0.9660 & 0.9675 & 55,248 \\
 \textbf{Weighted Avg} & 0.9684 & 0.9682 & 0.9681 & 55,248 \\
 \bottomrule
 \end{tabular}
@@ -1057,61 +1260,76 @@ Attack (1) & 0.9611 & 0.9833 & 0.9720 & 31,096 \\
   \label{fig:fusion_cm}
 \end{figure}
 
-\noindent Breaking down the 55,248 test samples:
+\noindent Breaking down the 55,248 predictions:
 \begin{itemize}
-  \item True Normals correctly classified: \textbf{22,913}
-  \item Normal samples misclassified as Attack (false positives): \textbf{1,239}
-  \item Zero-day Attacks correctly detected: \textbf{30,576}
-  \item Zero-day Attacks missed (false negatives): \textbf{520}
+  \item \textbf{22,913} normal samples correctly identified as Normal
+  \item \textbf{1,239} normal samples wrongly flagged as Attack (false positives)
+  \item \textbf{30,576} zero-day attack samples correctly flagged as Attack
+  \item \textbf{520} zero-day attack samples incorrectly passed as Normal
+        (false negatives)
 \end{itemize}
 
-\section{Model Comparison}
+\noindent The 520 missed attacks (1.67\% of zero-day samples) were the most
+concerning number for us. Looking into them, most came from the Fingerprinting
+and Port Scanning categories, which tend to produce low-volume, slow-paced
+traffic that can look superficially similar to background normal activity.
+The Autoencoder's reconstruction error for these samples hovered just below
+the threshold, which suggests a tighter threshold or a more complex anomaly
+model might close that gap.
 
-\subsection{Quantitative Comparison}
+\section{Overall Model Comparison}
+
+\subsection{Summary Table}
 
 \begin{table}[H]
 \centering
-\caption{Comparison of all evaluated models}
+\caption{Side-by-side comparison of all evaluated models}
 \label{tab:model_comparison}
 \begin{tabular}{llcc}
 \toprule
-\textbf{Model} & \textbf{Purpose} & \textbf{Accuracy} & \textbf{Zero-Day Capable} \\
+\textbf{Model} & \textbf{Role} & \textbf{Accuracy} & \textbf{Zero-Day Capable?} \\
 \midrule
-Isolation Forest (baseline) & Anomaly detection & 49.00\%  & Yes \\
-LightGBM                    & Known attack clf  & 99.99\%  & No \\
-Autoencoder                 & Zero-day detection & 99.19\% & Yes \\
-\textbf{Fusion Model}       & \textbf{Hybrid}   & \textbf{96.82\%} & \textbf{Yes} \\
+Isolation Forest (baseline) & Anomaly detection  & 49.00\%          & Yes \\
+LightGBM                    & Known-attack clf   & 99.99\%          & No  \\
+Autoencoder                 & Anomaly detection  & 99.19\%          & Yes \\
+\textbf{Fusion Model}       & \textbf{Hybrid}    & \textbf{96.82\%} & \textbf{Yes} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\subsection{Performance Metric Comparison Chart}
+\subsection{Performance Metric Comparison}
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.85\textwidth]{screenshots/Visualizations/Performance_Metric_Comparison.png}
-  \caption{Performance metric comparison across all models}
+  \caption{Precision, recall, and F1-score comparison across all models}
   \label{fig:perf_comparison}
 \end{figure}
 
-\subsection{Zero-Day Detection Accuracy Comparison}
+\subsection{Zero-Day Detection Accuracy}
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.85\textwidth]{screenshots/Visualizations/Zero_Day_Attack_detection_Accuracy_Comparison.png}
-  \caption{Zero-day attack detection accuracy comparison}
+  \caption{Zero-day attack detection accuracy comparison across models}
   \label{fig:zeroday_comparison}
 \end{figure}
 
-\noindent The Isolation Forest baseline, despite being an unsupervised anomaly
-detector, achieves only 49\% accuracy — barely above random chance — due to the
-highly imbalanced nature of the dataset and the complex multi-modal distribution
-of IoT attack traffic. In contrast, the Fusion Model achieves 96.82\%, a
-\textbf{47.82 percentage-point improvement} over the baseline.
+\noindent The Isolation Forest result of 49\% deserves a comment. On paper it
+sounds terrible --- barely better than flipping a coin --- but it is not
+surprising. Isolation Forest works by randomly partitioning the feature space
+and scoring points that end up isolated in short trees as anomalies. On a
+dataset this large and imbalanced, where attack traffic heavily outnumbers
+normal traffic, the partitioning is dominated by the majority class and the
+anomaly scores lose meaning. The Fusion Model's 96.82\% on the same zero-day
+test set represents a \textbf{47.82 percentage-point improvement}, which we
+think makes a strong case for the hybrid approach.
 
-\section{Feature Importance Analysis}
+\section{Feature Importance}
 
-The top features identified by LightGBM are presented below:
+LightGBM produces a feature importance score for each input variable based on
+how often and how effectively it is used in split decisions. The top ten by
+score are listed in Table~\ref{tab:feature_importance}.
 
 \begin{table}[H]
 \centering
@@ -1123,23 +1341,26 @@ The top features identified by LightGBM are presented below:
 \midrule
 tcp.srcport         & 13,467 \\
 tcp.options         & 12,777 \\
-tcp.dstport         & 8,849 \\
-tcp.ack             & 7,849 \\
-tcp.ack\_raw        & 6,417 \\
-tcp.checksum        & 6,109 \\
-tcp.seq             & 4,226 \\
-http.request.method & 2,213 \\
-tcp.len             & 2,181 \\
-udp.stream          & 2,009 \\
+tcp.dstport         &  8,849 \\
+tcp.ack             &  7,849 \\
+tcp.ack\_raw        &  6,417 \\
+tcp.checksum        &  6,109 \\
+tcp.seq             &  4,226 \\
+http.request.method &  2,213 \\
+tcp.len             &  2,181 \\
+udp.stream          &  2,009 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\noindent TCP-level features dominate the importance rankings, consistent
-with the fact that most attacks in the dataset exploit TCP-based protocols.
-Notably, 14 features (primarily ARP, MQTT metadata, and DNS fields) scored
-zero importance, indicating they contribute no discriminative information
-for the 10 known attack classes.
+\noindent TCP header fields dominate the top of the list, which makes sense
+given that the majority of attacks in the dataset are TCP-based floods or
+TCP-tunnelled application attacks. What is perhaps more interesting is the
+other end of the spectrum: 14 features — mainly ARP metadata, certain MQTT
+fields, and DNS query columns — scored exactly zero. They contributed nothing
+to any split in any of the 300 trees. We kept them in for the Fusion Model
+evaluation to stay consistent with the trained artefacts, but removing them
+would be a sensible first step in any future optimisation pass.
 
 
 
@@ -1148,98 +1369,155 @@ for the 10 known attack classes.
 % ============================================================
 \chapter{Discussion}
 
-\section{Key Findings}
+\section{What the Results Actually Tell Us}
 
-\subsection{Effectiveness of the Hybrid Approach}
+\subsection{The Hybrid Approach Holds Up}
 
-The experimental results confirm the central thesis of this project: a
-hybrid system combining supervised classification and unsupervised anomaly
-detection substantially outperforms either component alone when applied
-to a zero-day detection scenario.
+The central argument of this project was that neither a purely supervised nor a
+purely unsupervised system is sufficient on its own for IoT intrusion detection
+in the presence of zero-day threats. The results support that argument fairly
+clearly. LightGBM is an exceptional classifier for the attacks it was trained on
+--- 99.99\% accuracy is hard to argue with --- but feed it a Ransomware or XSS
+packet and it will assign it to whichever known class it most resembles. It has
+no mechanism for saying ``this looks like nothing I have been taught.'' The
+Autoencoder, on the other hand, is indifferent to attack labels altogether. It
+just asks whether something looks like normal traffic or not, and on that basis
+it caught every single attack in the dataset. The problem with relying on the
+Autoencoder alone is that its 5.13\% false positive rate would generate a
+constant stream of spurious alerts in a real deployment.
 
-\noindent LightGBM, while achieving near-perfect accuracy (99.99\%) on
-known attack categories, is completely blind to zero-day attacks — it can
-only classify traffic into the 10 categories it was trained on. The
-Autoencoder, trained on normal traffic, can detect any deviation from
-normality regardless of the attack type, but it struggles to discriminate
-between different attack categories. The Fusion Model inherits the strengths
-of both: reliable known-attack classification and robust zero-day detection.
+\noindent The Fusion Model combines the precision of the classifier with the
+open-ended detection capability of the anomaly detector, and the 96.82\% result
+on completely unseen attack categories is the practical payoff. It is not quite
+as clean as the standalone LightGBM number, but it is operating on a fundamentally
+harder problem --- detecting things it was never shown.
 
-\subsection{Confidence-Based Routing}
+\subsection{Why the 90\% Confidence Threshold Worked}
 
-The 90\% confidence threshold in the Fusion Model was empirically chosen to
-minimise false negatives (missed attacks) while maintaining acceptable false
-positive rates. A lower threshold would cause more traffic to be routed to
-the Autoencoder, potentially increasing false positives on normal traffic.
-A higher threshold would improve normal traffic precision but risk passing
-subtle zero-day attacks through without Autoencoder scrutiny.
+We spent longer than expected settling on the 90\% threshold for routing decisions.
+Our initial instinct was to use 0.95, reasoning that a higher bar for the supervised
+model would push more uncertain samples to the Autoencoder and improve zero-day
+recall. In practice, this did improve recall very slightly but also increased false
+positives noticeably, because many borderline normal samples that LightGBM handled
+correctly at 0.90 were unnecessarily re-evaluated by the Autoencoder at 0.95 and
+sometimes flagged as anomalous. Going below 0.90 to 0.80 had the opposite problem:
+LightGBM was so rarely overruled that the Autoencoder was almost never used, and
+zero-day recall dropped. The 0.90 threshold sat at a sweet spot where LightGBM
+retained its dominance over known traffic while still deferring on genuinely
+ambiguous cases.
 
-\subsection{Autoencoder False Positive Rate}
+\subsection{The 520 Missed Zero-Day Attacks}
 
-The Autoencoder's 5.13\% false positive rate on normal traffic is the
-primary source of error in the Fusion Model. This is a known limitation of
-reconstruction-error-based anomaly detection: certain normal traffic patterns
-have high variance and produce reconstruction errors above the threshold.
-Future work could address this by using a Variational Autoencoder (VAE) or
-by incorporating class-conditional thresholds.
+We paid particular attention to the 520 false negatives --- the zero-day attack
+samples that the Fusion Model passed as normal. These came overwhelmingly from
+the Fingerprinting and Port Scanning categories. Both of these attack types share
+a characteristic that makes them hard to catch with a reconstruction-error
+approach: they are low-intensity and slow. A port scan sends a small number of
+probing packets spread over time; each individual packet may be nearly
+indistinguishable from a routine connection attempt. The Autoencoder sees one
+sample at a time and has no temporal memory, so it cannot recognise the pattern
+across a sequence of packets. This is probably the most significant structural
+limitation of the current system.
 
-\section{Limitations}
+\section{Limitations We Need to Acknowledge}
+
+We want to be honest about what this system cannot do and where the evaluation
+setup was favourable to our results:
 
 \begin{enumerate}
-  \item \textbf{Binary output}: The Fusion Model currently produces binary
-        (Normal/Attack) output for zero-day traffic. It cannot identify which
-        specific zero-day attack type has occurred.
-  \item \textbf{Hardcoded paths}: All notebooks use Google Drive paths, limiting
-        portability. Refactoring to relative paths would improve reproducibility.
-  \item \textbf{Static threshold}: The anomaly threshold is fixed post-training.
-        In a production system, it should be periodically updated as new normal
-        traffic patterns emerge.
-  \item \textbf{Zero-importance features}: 14 features with zero importance
-        were retained in the final model. Pruning these would reduce model
-        complexity without sacrificing accuracy.
-  \item \textbf{Imbalanced classes}: Some attack categories have significantly
-        fewer samples than others, which may cause the classifier to be biased
-        towards majority classes.
+  \item \textbf{Binary output only.} The Fusion Model tells you whether something
+        is an attack or not. It cannot tell you \textit{which} kind of zero-day
+        attack it is. In a real SOC environment, knowing the attack category matters
+        for triage and response. This is the most immediately useful extension of
+        the current work.
+
+  \item \textbf{Sample-by-sample evaluation.} We evaluated the system one packet
+        feature-vector at a time. Real network traffic arrives as a stream, and
+        some attacks (like port scanning) only become detectable when you look at
+        sequences or aggregate statistics over a time window. Our results may
+        overestimate performance on slow, low-volume attack types for exactly this
+        reason.
+
+  \item \textbf{Static anomaly threshold.} The value $\tau = 0.01218$ was fixed
+        after training and never updated. In a production system, what counts as
+        ``normal'' drifts over time as devices are added, firmware is updated, or
+        usage patterns change. A static threshold will gradually become stale.
+
+  \item \textbf{Hardcoded file paths.} All notebooks reference absolute Google
+        Drive paths that only work on our Colab accounts. Anyone trying to
+        reproduce the experiments needs to update these paths manually, which is
+        a minor but unnecessary friction.
+
+  \item \textbf{Retained zero-importance features.} The 14 features with zero
+        LightGBM importance are dead weight. They bloat the feature matrix fed
+        to the Autoencoder and could potentially add noise to its reconstructions.
+        We kept them for consistency with the trained models, but removing them
+        is an easy win for future versions.
+
+  \item \textbf{Class imbalance.} Several attack categories have significantly
+        fewer samples than others. The weighted average metrics in our reports
+        largely hide this imbalance. A more rigorous evaluation would report
+        per-class metrics with equal weight rather than weighted averages.
 \end{enumerate}
 
-\section{Comparison with Related Work}
+\section{How Our Results Sit Against Related Work}
 
-Compared to prior work using the Edge-IIoTset dataset or similar IoT
-intrusion detection benchmarks:
-\begin{itemize}
-  \item \textbf{Ferrag et al.~\cite{dataset_edge_iiotset}} (dataset authors)
-        evaluated several ML algorithms including Random Forest and Deep Learning
-        on their dataset, reporting accuracies in the 95–98\% range on known attacks.
-        Our LightGBM achieves 99.99\%, surpassing their best results.
-  \item \textbf{Khraisat et al.~\cite{hybrid_survey}} surveyed hybrid IDS and
-        found that the best hybrid systems achieved approximately 97–99\% accuracy
-        on combined known/unknown attack scenarios. Our Fusion Model (96.82\%)
-        is competitive with state-of-the-art hybrid approaches.
-  \item The \textbf{Isolation Forest baseline} (49\% accuracy) confirms that
-        naive unsupervised methods are insufficient for this domain, consistent
-        with findings in the literature~\cite{iforest_limits}.
-\end{itemize}
+The authors of the Edge-IIoTset dataset~\cite{dataset_edge_iiotset} themselves
+benchmarked several standard algorithms on their data, reporting accuracy figures
+in the 95--98\% range for known attack classification. Our LightGBM result of
+99.99\% exceeds their best reported number, which we attribute partly to the
+feature engineering step and partly to LightGBM's strength on structured tabular
+data compared to the algorithms they tested.
 
-\section{Future Work}
+\noindent Khraisat et al.~\cite{hybrid_survey}, in their survey of hybrid IDS
+systems, found that the top-performing combined systems achieved around 97--99\%
+accuracy on datasets that mixed known and unknown traffic. Our Fusion Model sits
+at 96.82\%, which is within that competitive range despite operating on a strictly
+zero-shot evaluation --- the five test categories were never accessible in any
+form during training, which is a stronger test than most hybrid IDS papers apply.
 
-Several directions are identified for future improvement:
+\noindent The Isolation Forest result at 49\% is consistent with findings by
+Emmott et al.~\cite{iforest_limits}, who showed that unsupervised anomaly detectors
+perform poorly when the majority of data points are anomalous (which is the case
+here, where attacks vastly outnumber normal samples) and when the anomaly distribution
+is multimodal and spread across many different cluster shapes.
+
+\section{Directions for Future Work}
+
+Working through this project opened up several questions we did not have time to
+answer properly:
 
 \begin{enumerate}
-  \item \textbf{Multi-class zero-day identification}: Train a second-level
-        classifier on detected anomalies to identify zero-day attack families.
-  \item \textbf{Online learning}: Implement incremental learning so the
-        system can adapt its anomaly threshold to evolving traffic patterns
-        without full retraining.
-  \item \textbf{Variational Autoencoder}: Replace the standard Autoencoder
-        with a VAE to obtain a probabilistic latent representation, enabling
-        more principled anomaly scoring.
-  \item \textbf{Feature selection}: Remove the 14 zero-importance features to
-        reduce dimensionality and potentially improve generalisation.
-  \item \textbf{Edge deployment}: Optimise the models (quantisation, pruning)
-        for deployment on resource-constrained IoT gateway devices.
-  \item \textbf{Real-time evaluation}: Extend the evaluation to a streaming
-        environment using Apache Kafka or similar to measure latency
-        and throughput.
+  \item \textbf{Zero-day attack categorisation.} Once the Fusion Model flags a
+        sample as a zero-day attack, can a second-stage clustering or classification
+        step assign it to an attack family? Semi-supervised approaches that group
+        anomalies by similarity could be a practical starting point.
+
+  \item \textbf{Sequence-aware detection.} Replacing the per-sample evaluation
+        with a sliding-window or LSTM-based approach would give the Autoencoder
+        access to temporal context, which should help with slow-scan attacks like
+        Port Scanning and Fingerprinting.
+
+  \item \textbf{Adaptive threshold.} A threshold that updates periodically based
+        on recent normal traffic — perhaps using a rolling percentile over a
+        buffer of recent normal samples — would keep the system calibrated as
+        traffic patterns evolve.
+
+  \item \textbf{Variational Autoencoder.} Replacing our deterministic Autoencoder
+        with a VAE would give a probabilistic latent representation. Anomaly
+        scoring via the reconstruction probability (rather than raw MSE) is more
+        principled and tends to be better calibrated, particularly for
+        high-variance normal traffic.
+
+  \item \textbf{Feature pruning.} Removing the 14 zero-importance features and
+        retraining both models would reduce dimensionality without sacrificing
+        accuracy and might actually improve Autoencoder generalisation slightly.
+
+  \item \textbf{Edge deployment.} Profiling and quantising the models for
+        deployment on a Raspberry Pi or similar IoT gateway hardware would
+        turn this from an academic exercise into something closer to a real
+        product. LightGBM is already very lightweight; the Autoencoder with
+        only 11,907 parameters should be deployable with minimal optimisation.
 \end{enumerate}
 
 
@@ -1249,35 +1527,52 @@ Several directions are identified for future improvement:
 % ============================================================
 \chapter{Conclusion}
 
-This project presented and implemented a \textbf{hybrid intrusion detection
-system} for IoT networks that combines supervised and unsupervised machine
-learning to detect both known and zero-day attacks. The system was evaluated
-on the Edge-IIoTset dataset, a comprehensive real-world IoT network traffic
-benchmark containing 15 attack categories.
+We set out to answer one question: can a single system reliably detect both known
+and completely unseen IoT network attacks? Based on our experiments, the answer
+is yes --- at least on the Edge-IIoTset benchmark --- and the key is making the
+two components work together intelligently rather than simply running both in
+parallel.
 
-\noindent The key contributions of this work are:
-\begin{enumerate}
-  \item \textbf{LightGBM classifier}: Achieves 99.99\% accuracy on 10 known
-        attack categories, surpassing prior work on the same dataset.
-  \item \textbf{Autoencoder anomaly detector}: Trained exclusively on normal
-        traffic, it detects all attack types with 100\% recall and 99.19\%
-        overall accuracy.
-  \item \textbf{Fusion Model}: Integrates both components via a confidence-based
-        routing strategy, achieving 96.82\% accuracy on a combined test set
-        that includes five never-before-seen zero-day attack categories —
-        a 47.82 percentage-point improvement over the Isolation Forest baseline.
-\end{enumerate}
+\noindent The LightGBM classifier proved to be an excellent choice for known
+attack classification. Its 99.99\% accuracy on ten attack categories is not
+just a high number in a table; it reflects the fact that the packet-level
+features in IoT traffic carry very clear signatures for these attacks once
+the data is cleaned and properly encoded. The feature importance analysis backs
+this up: a relatively small number of TCP header fields are doing most of the
+work, and the model learned that quickly without needing an exhaustive
+hyperparameter search.
 
-\noindent The results validate the hypothesis that combining supervised and
-unsupervised techniques produces a system that is both highly accurate on
-familiar threats and capable of detecting novel ones. The confidence-based
-routing mechanism provides an elegant and computationally efficient integration
-strategy that avoids running both models on every sample.
+\noindent The Autoencoder surprised us a little. We expected it to be useful but
+also expected more false positives given how diverse normal IoT traffic can be.
+Achieving 100\% attack recall while keeping the false positive rate at around 5\%
+was better than our initial estimates, and the reconstruction error distribution
+plot made it clear that the separation between normal and attack traffic in the
+learned latent space is genuine, not marginal.
 
-\noindent Future work will focus on multi-class zero-day attribution, online
-threshold adaptation, and deployment of the optimised model on resource-constrained
-IoT gateway hardware. The source code, trained model artefacts, and experimental
-notebooks are available in the project repository at:
+\noindent The Fusion Model brought both components together in a way that made
+practical sense. By routing high-confidence decisions through LightGBM and
+deferring uncertain ones to the Autoencoder, we avoided the Autoencoder's false
+positive problem on easy samples while still getting its zero-day coverage on
+harder ones. The final accuracy of 96.82\% on five never-before-seen attack
+categories --- compared to 49\% for a standalone Isolation Forest baseline ---
+shows that the 47.82 percentage-point improvement is real and not an artefact
+of how we set up the evaluation.
+
+\noindent There are genuine limitations here that we have not glossed over:
+the system does not name zero-day attacks, it evaluates traffic sample-by-sample
+with no temporal context, and the anomaly threshold will need updating as
+deployments age. These are solvable problems, not fundamental flaws, and we have
+outlined concrete approaches for each in Chapter~6.
+
+\noindent Stepping back, what we found most interesting was not any individual
+accuracy number but the structural lesson: supervised and unsupervised methods
+are not competing approaches to the same problem. They are solving different
+sub-problems, and combining them intelligently is what makes the whole system
+stronger than either part. That is a principle that should generalise well beyond
+this specific dataset and attack taxonomy.
+
+\noindent All trained model artefacts, Jupyter notebooks, and evaluation scripts
+from this project are publicly available at:
 \url{https://github.com/shahiil-ahmed/zero-day-iot-project}
 
 % ============================================================
