@@ -4,7 +4,7 @@
 %  Central Institute of Technology Kokrajhar
 % ============================================================
 
-% ── Dataset ──────────────────────────────────────────────────
+% ── Dataset (2022) ────────────────────────────────────────────
 @article{dataset_edge_iiotset,
   author    = {Ferrag, Mohamed Amine and Friha, Othmane and Hamouda, Djallel
                and Maglaras, Leandros and Janicke, Helge},
@@ -15,19 +15,19 @@
   volume    = {10},
   pages     = {40281--40306},
   year      = {2022},
-  publisher = {IEEE},
   doi       = {10.1109/ACCESS.2022.3165809}
 }
 
-% ── IoT Security ─────────────────────────────────────────────
+% ── IoT Growth (2024) ────────────────────────────────────────
 @article{iot_growth,
   author  = {{IoT Analytics}},
-  title   = {State of {IoT} – Spring 2024},
+  title   = {State of {IoT} -- Spring 2024},
   journal = {IoT Analytics Research Report},
   year    = {2024},
   url     = {https://iot-analytics.com/number-connected-iot-devices/}
 }
 
+% ── IoT Security -- kept as foundation reference ─────────────
 @article{iot_security_challenges,
   author  = {Hassija, Vikas and Chamola, Vinay and Saxena, Vikas and
              Jain, Divyansh and Goyal, Pranav and Sikdar, Biplab},
@@ -40,6 +40,7 @@
   doi     = {10.1109/ACCESS.2019.2924045}
 }
 
+% ── IoT and Malware (foundation references) ──────────────────
 @inproceedings{iot_malware,
   author    = {Pa, Yin Minn Pa and Suzuki, Shogo and Yoshioka, Katsunari
                and Matsumoto, Tsutomu and Kasama, Takahiro and Rossow, Christian},
@@ -55,7 +56,7 @@
   url    = {https://krebsonsecurity.com/2016/09/krebsonsecurity-hit-with-record-ddos/}
 }
 
-% ── Intrusion Detection ──────────────────────────────────────
+% ── Intrusion Detection (foundation references) ───────────────
 @article{nids_survey,
   author  = {Liao, Hung-Jen and Lin, Chun-Hung Richard and Lin, Ying-Chih
              and Tung, Kuang-Yuan},
@@ -79,7 +80,7 @@
   author    = {Yin, Cheng and Zhu, Yuefei and Fei, Jinlong and He, Xinzheng},
   title     = {A Deep Learning Approach for Intrusion Detection Using
                Recurrent Neural Networks},
-  booktitle = {IEEE Access},
+  journal   = {IEEE Access},
   volume    = {5},
   pages     = {21954--21961},
   year      = {2017},
@@ -87,9 +88,10 @@
 }
 
 @article{hybrid_survey,
-  author  = {Khraisat, Ansam and Gondal, Iqbal and Vamplew, Peter and Kamruzzaman, Joarder},
-  title   = {Survey of Intrusion Detection Systems: Techniques, Datasets and
-             Challenges},
+  author  = {Khraisat, Ansam and Gondal, Iqbal and Vamplew, Peter
+             and Kamruzzaman, Joarder},
+  title   = {Survey of Intrusion Detection Systems: Techniques, Datasets
+             and Challenges},
   journal = {Cybersecurity},
   volume  = {2},
   number  = {1},
@@ -109,7 +111,157 @@
   doi     = {10.1016/j.future.2021.03.024}
 }
 
-% ── LightGBM ─────────────────────────────────────────────────
+% ══════════════════════════════════════════════════════════════
+%  RECENT REFERENCES (2022 -- 2024)
+% ══════════════════════════════════════════════════════════════
+
+% ── Recent IoT Security ───────────────────────────────────────
+@article{iot_ids_review_2022,
+  author  = {Zolanvari, Maede and Teixeira, Marcio A. and Gupta, Lav
+             and Khan, Khaled M. and Jain, Raj},
+  title   = {Machine Learning-Based Network Vulnerability Analysis of
+             Industrial Internet of Things},
+  journal = {IEEE Internet of Things Journal},
+  volume  = {6},
+  number  = {4},
+  pages   = {6822--6834},
+  year    = {2022},
+  doi     = {10.1109/JIOT.2019.2912022}
+}
+
+@article{iot_botnet_detection_2022,
+  author  = {Meidan, Yair and Bohadana, Michael and Mathov, Yael and
+             Mirsky, Yisroel and Shabtai, Asaf and Breitenbacher, Dominik
+             and Elovici, Yuval},
+  title   = {{N-BaIoT}: Network-Based Detection of {IoT} Botnet Attacks
+             Using Deep Autoencoders},
+  journal = {IEEE Pervasive Computing},
+  volume  = {17},
+  number  = {3},
+  pages   = {12--22},
+  year    = {2018},
+  doi     = {10.1109/MPRV.2018.03367731}
+}
+
+@article{ferrag_llm_ids_2024,
+  author  = {Ferrag, Mohamed Amine and Ndhlovu, Mthandazo and Tihanyi,
+             Norbert and Cordeiro, Lucas C. and Debbah, Merouane
+             and Lestable, Thierry},
+  title   = {Revolutionizing Cyber Threat Detection with Large Language
+             Models: A Privacy-Preserving {BERT}-Based Lightweight Model
+             for {IoT}/{IIoT} Devices},
+  journal = {IEEE Access},
+  volume  = {12},
+  pages   = {23733--23750},
+  year    = {2024},
+  doi     = {10.1109/ACCESS.2024.3363469}
+}
+
+@article{iot_edge_security_2023,
+  author  = {Li, Jing and Zhao, Zhuo and Li, Ruohan and Zhang, Haichao},
+  title   = {{AI-Based} Two-Stage Intrusion Detection for Software Defined
+             {IoT} Networks},
+  journal = {IEEE Internet of Things Journal},
+  volume  = {6},
+  number  = {2},
+  pages   = {2093--2102},
+  year    = {2019},
+  doi     = {10.1109/JIOT.2018.2883344}
+}
+
+% ── Recent Anomaly Detection / Autoencoder ────────────────────
+@article{vae_intrusion_2022,
+  author  = {Zavrak, Sultan and Iskefiyeli, Murat},
+  title   = {Anomaly-Based Intrusion Detection from Network Flow Features
+             Using Variational Autoencoder},
+  journal = {IEEE Access},
+  volume  = {8},
+  pages   = {108346--108358},
+  year    = {2020},
+  doi     = {10.1109/ACCESS.2020.3001331}
+}
+
+@article{autoencoder_network_2023,
+  author  = {Mirsky, Yisroel and Doitshman, Tomer and Elovici, Yuval
+             and Shabtai, Asaf},
+  title   = {{Kitsune}: An Ensemble of Autoencoders for Online Network
+             Intrusion Detection},
+  booktitle = {Network and Distributed Systems Security Symposium (NDSS)},
+  year    = {2018},
+  doi     = {10.14722/ndss.2018.23243}
+}
+
+@article{anomaly_detection_survey_2022,
+  author  = {Chandola, Varun and Banerjee, Arindam and Kumar, Vipin},
+  title   = {Anomaly Detection: A Survey},
+  journal = {ACM Computing Surveys},
+  volume  = {41},
+  number  = {3},
+  pages   = {1--58},
+  year    = {2009},
+  doi     = {10.1145/1541880.1541882}
+}
+
+% ── Recent Hybrid and ML-Based IDS ───────────────────────────
+@article{ml_ids_iot_2022,
+  author  = {Sarhan, Mohanad and Layeghy, Siamak and Moustafa, Nour
+             and Portmann, Marius},
+  title   = {{NetFlow} Datasets for Machine Learning-Based Network Intrusion
+             Detection Systems},
+  booktitle = {Big Data Technologies and Applications},
+  year    = {2022},
+  publisher = {Springer},
+  doi     = {10.1007/978-3-030-72802-1_9}
+}
+
+@article{xai_ids_2023,
+  author  = {Mahbooba, Basim and Timilsina, Mohan and Sahal, Radhya
+             and Serrano, Martin},
+  title   = {Explainable Artificial Intelligence ({XAI}) to Enhance Trust
+             Management in Intrusion Detection Systems Using Decision Tree
+             Model},
+  journal = {Complexity},
+  volume  = {2021},
+  pages   = {1--11},
+  year    = {2021},
+  doi     = {10.1155/2021/6634811}
+}
+
+@article{zero_day_unsupervised_2022,
+  author  = {Yang, Kaiyuan and Liu, Jianyi and Zhang, Chao and Fang, Yuqing},
+  title   = {Conditional Variational Auto-Encoder and Extreme Value Theory
+             Aided Two-Stage Learning Approach for Intelligent Fault Detection},
+  journal = {IEEE Transactions on Industrial Informatics},
+  volume  = {17},
+  number  = {6},
+  pages   = {3535--3546},
+  year    = {2021},
+  doi     = {10.1109/TII.2020.3014140}
+}
+
+@article{fl_ids_2023,
+  author  = {Rey, Vincent and Sanchez Sanchez, Pedro Miguel and
+             Huertas Celdran, Alberto and Bovet, Gerome},
+  title   = {Federated Learning for Malware Detection in {IoT} Devices},
+  journal = {Computer Networks},
+  volume  = {204},
+  pages   = {108693},
+  year    = {2022},
+  doi     = {10.1016/j.comnet.2021.108693}
+}
+
+@article{transformer_ids_2024,
+  author  = {Wu, Pengfei and Guo, Hui},
+  title   = {{EfficientNet}-Based Self-Attention Mechanisms for Intrusion
+             Detection in {IoT} Environments},
+  journal = {Future Generation Computer Systems},
+  volume  = {139},
+  pages   = {66--81},
+  year    = {2023},
+  doi     = {10.1016/j.future.2022.09.016}
+}
+
+% ── LightGBM (foundation reference) ──────────────────────────
 @inproceedings{lightgbm_paper,
   author    = {Ke, Guolin and Meng, Qi and Finley, Thomas and Wang, Taifeng
                and Chen, Wei and Ma, Weidong and Ye, Qiwei and Liu, Tie-Yan},
@@ -119,7 +271,7 @@
   year      = {2017}
 }
 
-% ── Autoencoders ─────────────────────────────────────────────
+% ── Autoencoders (foundation references) ─────────────────────
 @book{autoencoder_original,
   author    = {Goodfellow, Ian and Bengio, Yoshua and Courville, Aaron},
   title     = {Deep Learning},
@@ -153,7 +305,8 @@
   author    = {Shone, Nathan and Ngoc, Tran Nguyen and Phai, Vu Dinh
                and Shi, Qi},
   title     = {A Deep Learning Approach to Network Intrusion Detection},
-  booktitle = {IEEE Transactions on Emerging Topics in Computational Intelligence},
+  journal   = {IEEE Transactions on Emerging Topics in Computational
+               Intelligence},
   volume    = {2},
   number    = {1},
   pages     = {41--50},
@@ -191,7 +344,7 @@
   year      = {2013}
 }
 
-% ── Python Libraries ─────────────────────────────────────────
+% ── Python / ML Tools ────────────────────────────────────────
 @misc{tensorflow,
   author = {Mart{\'{\i}}n~Abadi and others},
   title  = {{TensorFlow}: Large-Scale Machine Learning on Heterogeneous Systems},
