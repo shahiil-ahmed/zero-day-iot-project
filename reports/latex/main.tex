@@ -392,16 +392,19 @@ has been trained on, and it also needs to flag traffic that does not look like
 anything it has seen before. Most existing systems do one or the other, rarely
 both.
 
-\noindent More specifically, the three problems we focused on are:
+\noindent More specifically, the three problems addressed in this work are:
 \begin{enumerate}
-  \item \textbf{Known attack classification}: Given labelled training data
-        covering multiple attack types, can we build a classifier that
-        distinguishes them quickly and accurately enough to be practical?
-  \item \textbf{Zero-day detection}: Without any labelled examples of a new
-        attack, can we still catch it by recognising that it looks different
-        from normal traffic?
-  \item \textbf{Integration}: Can both capabilities be combined in one
-        coherent system rather than running as two separate, disconnected tools?
+  \item \textbf{Known attack classification}: Existing IoT intrusion detection
+        systems require a classifier capable of distinguishing multiple labelled
+        attack types quickly and accurately enough for practical deployment.
+  \item \textbf{Zero-day detection}: Signature-based and purely supervised systems
+        are unable to detect attacks for which no labelled training examples exist;
+        an anomaly-based mechanism is necessary to identify traffic that deviates
+        from established normal behaviour without relying on prior attack knowledge.
+  \item \textbf{Integration}: Operating a supervised classifier and an unsupervised
+        anomaly detector as two separate, disconnected tools is operationally
+        impractical; a unified system that intelligently combines both capabilities
+        under a single decision framework is required.
 \end{enumerate}
 
 \section{Objectives}
@@ -557,19 +560,69 @@ zero-day coverage.
 \section{Datasets for IoT Intrusion Detection Research}
 
 One frustration that kept coming up in our literature search was the shortage of
-good IoT-specific datasets. The KDD Cup data is ancient. NSL-KDD is cleaner but
-still not representative of modern IoT protocols. CICIDS datasets are better but
-focus on general enterprise traffic rather than constrained IoT devices.
+good IoT-specific datasets. The KDD Cup 1999 data~\cite{kdd_cup} is now over two
+decades old and was generated synthetically, making it a poor proxy for modern IoT
+traffic. NSL-KDD is cleaner but still not representative of the constrained devices
+and protocols found in real IoT deployments. CICIDS datasets improved realism for
+enterprise networks but do not cover IoT-specific protocols such as MQTT or
+Modbus TCP.
 
 \noindent The \textbf{Edge-IIoTset} dataset~\cite{dataset_edge_iiotset} released by
-Ferrag et al. in 2022 addressed many of these gaps. They built an actual IoT testbed
-with ten different device types — cameras, temperature and humidity sensors, weather
-stations, water quality monitors, and others — and captured real traffic using
-Wireshark. The resulting dataset covers fourteen attack categories across protocols
-like MQTT, Modbus, HTTP, and DNS that are actually used in real IoT deployments. The
-authors also evaluated several standard ML algorithms on it themselves, reporting
-accuracy figures in the 95--98\% range on known attacks, which gave us a useful
-comparison point for our own experiments.
+Ferrag et al. in 2022 is among the most realistic publicly available IoT traffic
+collections and was selected for this project. A detailed description of the dataset
+— including its statistics, attack taxonomy, and the train/test split strategy used
+in this work — is provided in Chapter~3 (Section~3.2).
+
+\section{Research Gap}
+
+The literature reviewed in this chapter reveals several recurring limitations that
+motivated the design of this project.
+
+\begin{enumerate}
+
+  \item \textbf{Supervised-only systems cannot handle zero-day threats.}
+        The majority of high-performing IDS proposals — including LightGBM-based
+        classifiers~\cite{lgbm_ids} and even deep learning approaches — are
+        trained on fixed sets of labelled attack classes. Once deployed, they
+        have no mechanism to flag attack types that were absent from their
+        training data. The practical consequence is that any sufficiently novel
+        attack will pass through undetected regardless of how high the in-sample
+        accuracy is.
+
+  \item \textbf{Unsupervised anomaly detectors lack precision on known attacks.}
+        Anomaly-based methods such as Isolation Forest and standard autoencoders
+        can in principle detect novel behaviour, but they do not distinguish
+        between different known attack types and tend to produce higher false
+        positive rates~\cite{hybrid_survey}. Used alone, they are not accurate
+        enough to replace a supervised classifier for the attacks a system is
+        already expected to recognise.
+
+  \item \textbf{Hybrid systems exist but their fusion logic is under-explored.}
+        Khraisat et al.~\cite{hybrid_survey} noted that while multi-model
+        architectures consistently outperform single-model ones, the fusion
+        mechanism itself is a major source of performance variation across
+        systems and is rarely studied in isolation. Most hybrid proposals
+        simply average or vote across model outputs without considering
+        per-sample confidence, which wastes the strengths of each individual
+        component.
+
+  \item \textbf{IoT-specific evaluation is scarce.}
+        Much of the existing hybrid IDS literature is evaluated on generic
+        enterprise datasets (KDD Cup, NSL-KDD, CICIDS) rather than on traffic
+        from real IoT devices and protocols. Results on these benchmarks do not
+        transfer reliably to the constrained, protocol-diverse environment of
+        an actual IoT deployment.
+
+\end{enumerate}
+
+\noindent This project addresses these gaps directly. A confidence-based fusion
+architecture is proposed that routes high-confidence decisions through a supervised
+LightGBM classifier while delegating uncertain and novel samples to an Autoencoder
+anomaly detector. The entire system is evaluated on the Edge-IIoTset dataset, which
+was captured from a physical IoT testbed using protocols genuinely representative of
+real deployments. Five attack categories are withheld entirely from training to
+simulate a true zero-day evaluation scenario — a stricter test than most existing
+hybrid IDS studies apply.
 
 
 
@@ -762,8 +815,8 @@ compensated by the higher number of estimators.
 
 \section{Autoencoder Design}
 
-Our Autoencoder is a fully connected, symmetric network with a four-layer encoder
-and a mirrored four-layer decoder:
+Our Autoencoder is a fully connected, symmetric network with a two-layer encoder,
+a single bottleneck layer, and a mirrored two-layer decoder:
 
 \begin{table}[H]
 \centering
@@ -864,39 +917,6 @@ inference time manageable.
 %  CHAPTER 4 – IMPLEMENTATION
 % ============================================================
 \chapter{Implementation}
-
-\section{Development Environment}
-
-We ran all experiments on Google Colab with a Tesla T4 GPU (12 GB VRAM). Colab
-was a practical choice given that none of us had local machines with GPUs, and the
-Autoencoder training — even though the model is relatively small — benefited
-noticeably from GPU acceleration compared to the CPU-only free tier. Model
-artefacts were saved to Google Drive during development and later exported to the
-project repository.
-
-\noindent The full software stack we used:
-
-\begin{table}[H]
-\centering
-\caption{Software stack and dependencies}
-\label{tab:software}
-\begin{tabular}{ll}
-\toprule
-\textbf{Library} & \textbf{Purpose} \\
-\midrule
-Python 3.10+       & Core programming language \\
-Pandas             & Data loading and manipulation \\
-NumPy              & Numerical computation \\
-Scikit-learn       & Preprocessing, metrics, Isolation Forest baseline \\
-LightGBM 4.x       & Supervised gradient boosting classifier \\
-TensorFlow / Keras & Autoencoder neural network \\
-Matplotlib         & Visualisation \\
-Seaborn            & Heatmaps and confusion matrices \\
-KaggleHub          & Dataset download (Edge-IIoTset) \\
-Google Colab       & Cloud GPU execution environment \\
-\bottomrule
-\end{tabular}
-\end{table}
 
 \section{Notebook Pipeline}
 
@@ -1113,15 +1133,46 @@ CPU environment.
 % ============================================================
 \chapter{Results and Evaluation}
 
-\section{Experimental Setup}
+\section{Development Environment and Experimental Setup}
 
-Every model was trained and evaluated on Google Colab using a Tesla T4 GPU
-with 12\,GB of RAM. We were strict about one thing throughout: the test sets
-were never touched until training was fully complete. No hyperparameter was
-tuned using the final test numbers. Evaluation was based on four metrics ---
-accuracy, precision, recall, and F1-score --- along with confusion matrices
-to give a per-class breakdown. We felt that looking at just accuracy would
-have been misleading given how imbalanced some class distributions are.
+All experiments were conducted on Google Colab using a Tesla T4 GPU with
+12\,GB of VRAM. Colab was a practical choice given that none of us had local
+machines with dedicated GPUs, and the Autoencoder training — even though the
+model is relatively small — benefited noticeably from GPU acceleration compared
+to the CPU-only free tier. Model artefacts were saved to Google Drive during
+development and later exported to the project repository.
+
+\noindent The full software stack used throughout the project is listed in
+Table~\ref{tab:software}.
+
+\begin{table}[H]
+\centering
+\caption{Software stack and dependencies}
+\label{tab:software}
+\begin{tabular}{ll}
+\toprule
+\textbf{Library} & \textbf{Purpose} \\
+\midrule
+Python 3.10+       & Core programming language \\
+Pandas             & Data loading and manipulation \\
+NumPy              & Numerical computation \\
+Scikit-learn       & Preprocessing, metrics, Isolation Forest baseline \\
+LightGBM 4.x       & Supervised gradient boosting classifier \\
+TensorFlow / Keras & Autoencoder neural network \\
+Matplotlib         & Visualisation \\
+Seaborn            & Heatmaps and confusion matrices \\
+KaggleHub          & Dataset download (Edge-IIoTset) \\
+Google Colab       & Cloud GPU execution environment \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent We were strict about one thing throughout: test sets were never
+touched until training was fully complete and no hyperparameter was tuned
+using the final test numbers. Evaluation is reported across four metrics ---
+accuracy, precision, recall, and F1-score --- together with per-class confusion
+matrices. Relying on accuracy alone would have been misleading given the class
+imbalance present in some partitions of the dataset.
 
 \section{LightGBM Results}
 
@@ -1636,5 +1687,33 @@ this specific dataset and attack taxonomy.
 % ============================================================
 \bibliographystyle{IEEEtran}
 \bibliography{references}
+
+% ── Plagiarism Report ────────────────────────────────────────
+\newpage
+\thispagestyle{empty}
+\begin{center}
+{\Large\bfseries\underline{PLAGIARISM REPORT}}
+\end{center}
+\vspace{0.5cm}
+
+\noindent The following pages reproduce the first two pages of the Turnitin
+originality report generated for this project submission.
+
+\vspace{0.5cm}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\textwidth]{Plagiarism/plagiarism_1.png}
+  \caption*{Plagiarism Report -- Page 1}
+\end{figure}
+
+\newpage
+\thispagestyle{empty}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\textwidth]{Plagiarism/plagiarism_2.png}
+  \caption*{Plagiarism Report -- Page 2}
+\end{figure}
 
 \end{document}
