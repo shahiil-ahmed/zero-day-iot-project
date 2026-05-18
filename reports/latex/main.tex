@@ -282,6 +282,28 @@ doing any of this without them.
   (Roll No. 202202021113) & (Roll No. 202202021020) \\
 \end{tabular}
 
+% ── Plagiarism Report ────────────────────────────────────────
+\newpage
+\thispagestyle{empty}
+\begin{center}
+{\Large\bfseries\underline{PLAGIARISM REPORT}}
+\end{center}
+\vspace{0.5cm}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{screenshots/plagiarism/page1.png}
+  \caption*{}
+\end{figure}
+
+\newpage
+\thispagestyle{empty}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{screenshots/plagiarism/page2.png}
+  \caption*{}
+\end{figure}
+
 % ── Abstract ─────────────────────────────────────────────────
 \newpage
 \begin{center}
@@ -387,14 +409,13 @@ both.
 
 \noindent More specifically, the three problems we focused on are:
 \begin{enumerate}
-  \item \textbf{Known attack classification}: Given labelled training data
-        covering multiple attack types, can we build a classifier that
-        distinguishes them quickly and accurately enough to be practical?
-  \item \textbf{Zero-day detection}: Without any labelled examples of a new
-        attack, can we still catch it by recognising that it looks different
-        from normal traffic?
-  \item \textbf{Integration}: Can both capabilities be combined in one
-        coherent system rather than running as two separate, disconnected tools?
+  \item \textbf{Known attack classification}: The system must accurately classify
+        network traffic among multiple known attack categories in real time.
+  \item \textbf{Zero-day detection}: The system must identify anomalous traffic
+        that deviates from learned normal patterns, even without prior labelled
+        examples of the specific attack.
+  \item \textbf{Integration}: Both capabilities must be integrated into a single
+        unified pipeline rather than operating as disconnected tools.
 \end{enumerate}
 
 \section{Objectives}
@@ -554,15 +575,11 @@ good IoT-specific datasets. The KDD Cup data is ancient. NSL-KDD is cleaner but
 still not representative of modern IoT protocols. CICIDS datasets are better but
 focus on general enterprise traffic rather than constrained IoT devices.
 
-\noindent The \textbf{Edge-IIoTset} dataset~\cite{dataset_edge_iiotset} released by
-Ferrag et al. in 2022 addressed many of these gaps. They built an actual IoT testbed
-with ten different device types — cameras, temperature and humidity sensors, weather
-stations, water quality monitors, and others — and captured real traffic using
-Wireshark. The resulting dataset covers fourteen attack categories across protocols
-like MQTT, Modbus, HTTP, and DNS that are actually used in real IoT deployments. The
-authors also evaluated several standard ML algorithms on it themselves, reporting
-accuracy figures in the 95--98\% range on known attacks, which gave us a useful
-comparison point for our own experiments.
+\noindent The Edge-IIoTset dataset~\cite{dataset_edge_iiotset}, released by Ferrag et al. in 2022, addressed many of these gaps by providing a comprehensive benchmark from a realistic IoT testbed with fourteen attack categories. We describe this dataset in detail in Chapter~3, as it forms the basis of all our experiments.
+
+\section{Research Gap}
+
+From our review of existing work, we identified a clear gap: while supervised classifiers like LightGBM achieve near-perfect accuracy on known IoT attacks, they offer no mechanism for detecting novel threats. Conversely, unsupervised anomaly detectors like autoencoders can flag unknown traffic but lack the precision to distinguish between specific attack types. No prior work on the Edge-IIoTset dataset has attempted a confidence-based fusion strategy that dynamically routes traffic between a supervised classifier and an unsupervised anomaly detector based on prediction confidence. This project addresses that gap by proposing and evaluating exactly such a hybrid system.
 
 
 
@@ -755,8 +772,8 @@ compensated by the higher number of estimators.
 
 \section{Autoencoder Design}
 
-Our Autoencoder is a fully connected, symmetric network with a four-layer encoder
-and a mirrored four-layer decoder:
+Our Autoencoder is a fully connected, symmetric network with a three-layer encoder
+and a mirrored three-layer decoder (seven layers total including input and output):
 
 \begin{table}[H]
 \centering
@@ -1106,15 +1123,16 @@ CPU environment.
 % ============================================================
 \chapter{Results and Evaluation}
 
-\section{Experimental Setup}
+\section{Evaluation Metrics}
 
-Every model was trained and evaluated on Google Colab using a Tesla T4 GPU
-with 12\,GB of RAM. We were strict about one thing throughout: the test sets
-were never touched until training was fully complete. No hyperparameter was
-tuned using the final test numbers. Evaluation was based on four metrics ---
-accuracy, precision, recall, and F1-score --- along with confusion matrices
-to give a per-class breakdown. We felt that looking at just accuracy would
-have been misleading given how imbalanced some class distributions are.
+All models were evaluated on held-out test sets that were never seen during training. No hyperparameter was tuned using the final test numbers. The following metrics were used throughout:
+\begin{itemize}
+  \item \textbf{Accuracy}: Overall fraction of correctly classified samples.
+  \item \textbf{Precision}: Fraction of predicted positives that are truly positive.
+  \item \textbf{Recall}: Fraction of actual positives correctly predicted.
+  \item \textbf{F1-Score}: Harmonic mean of precision and recall.
+  \item \textbf{Confusion Matrix}: Per-class visual breakdown of predictions.
+\end{itemize}
 
 \section{LightGBM Results}
 
